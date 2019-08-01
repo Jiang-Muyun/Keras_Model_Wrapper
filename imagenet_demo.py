@@ -13,8 +13,8 @@ from keras.models import Model
 from keras.applications import resnet50, mobilenet_v2, inception_v3, xception
 from tensorflow.python.keras import backend as K
 
-from common import *
-from warpper_classication import *
+from libs.common import *
+from libs.classication import *
 
 sess = tf.compat.v1.Session()
 sess.as_default()

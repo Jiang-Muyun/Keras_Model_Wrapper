@@ -14,8 +14,7 @@ import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
 from libs.common import *
-from libs.pascal_voc import *
-from libs.semantic_warper import *
+from libs.segmentation import *
 
 sess = tf.compat.v1.Session()
 sess.as_default()

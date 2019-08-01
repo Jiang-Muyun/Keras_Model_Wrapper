@@ -13,8 +13,8 @@ import keras
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
-from common import *
-from warpper_segmentation import *
+from libs.common import *
+from libs.segmentation import *
 
 sess = tf.compat.v1.Session()
 sess.as_default()

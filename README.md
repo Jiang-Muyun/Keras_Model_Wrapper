@@ -10,43 +10,33 @@ Install packages for python3
 sudo pip3 install tensorflow-gpu opencv-contrib-python matplotlib numpy keras
 ```
 
-Init workspace, and download weights.
+Init workspace, and download weights. The weights are cached in server inside NTU campus, so you will not be able to access the files outside NTU.
 
 ```bash
 mkdir -p tmp/weights
-cd tmp/weights
-mkdir deeplab inception mobilenet resnet_50 xception inception_resnet densenet nasnet
-cd deeplab
-wget http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5
+
+# deeplab
+wget -P tmp/weights/deeplab http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5
+wget -P tmp/weights/deeplab http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5
+wget -P tmp/weights/deeplab http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels.h5
+wget -P tmp/weights/deeplab http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5
+
+# xception
+wget -P tmp/weights/xception http://ntu.h1fast.com/weights/xception/xception_weights_tf_dim_ordering_tf_kernels_notop.h5
+wget -P tmp/weights/xception http://ntu.h1fast.com/weights/xception/xception_weights_tf_dim_ordering_tf_kernels.h5
+
+# inception
+wget -P tmp/weights/inception http://ntu.h1fast.com/weights/inception/inception_v3_weights_tf_dim_ordering_tf_kernels.h5
+wget -P tmp/weights/inception http://ntu.h1fast.com/weights/inception/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5
+
+# resnet
+wget -P tmp/weights/resnet http://ntu.h1fast.com/weights/resnet_50/resnet50_weights_tf_dim_ordering_tf_kernels.h5
+wget -P tmp/weights/resnet http://ntu.h1fast.com/weights/resnet_50/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5
+
+
 ```
 
-## All weights download
-
-The weights are cached in server inside NTU campus, so you will not be able to access the files outside NTU. Direct download very large h5 file from Github can be really slow, our cache server can provide more than 50 times faster download speed than Github.
-
-### deeplab
-
-- [deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5](http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5)
-- [deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5](http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5)
-- [deeplabv3_xception_tf_dim_ordering_tf_kernels.h5](http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels.h5)
-- [deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5](http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5)
-
-### xception
-
-- [xception_weights_tf_dim_ordering_tf_kernels_notop.h5](http://ntu.h1fast.com/weights/xception/xception_weights_tf_dim_ordering_tf_kernels_notop.h5)
-- [xception_weights_tf_dim_ordering_tf_kernels.h5](http://ntu.h1fast.com/weights/xception/xception_weights_tf_dim_ordering_tf_kernels.h5)
-
-### inception
-
-- [inception_v3_weights_tf_dim_ordering_tf_kernels.h5](http://ntu.h1fast.com/weights/inception/inception_v3_weights_tf_dim_ordering_tf_kernels.h5)
-- [inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5](http://ntu.h1fast.com/weights/inception/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5)
-
-### resnet
-
-- [resnet50_weights_tf_dim_ordering_tf_kernels.h5](http://ntu.h1fast.com/weights/resnet_50/resnet50_weights_tf_dim_ordering_tf_kernels.h5)
-- [resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5](http://ntu.h1fast.com/weights/resnet_50/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5)
-
-### mobilenet
+## More weights
 
 - [mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.35_224.h5](http://ntu.h1fast.com/weights/mobilenet/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.35_224.h5)
 - [mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_224.h5](http://ntu.h1fast.com/weights/mobilenet/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_224.h5)
