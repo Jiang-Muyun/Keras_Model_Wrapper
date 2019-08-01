@@ -1,0 +1,30 @@
+{
+    "num_classes": 21,
+    "labels": [
+        "background","aeroplane","bicycle","bird",
+        "boat","bottle","bus","car","cat","chair",
+        "cow","diningtable","dog","horse","motorbike",
+        "person","pottedplant","sheep","sofa","train","tv"
+    ],
+    "labels_index": {
+        "background": 0,"aeroplane": 1,"bicycle": 2,"bird": 3,
+        "boat": 4,"bottle": 5,"bus": 6,"car": 7,"cat": 8,
+        "chair": 9,"cow": 10,"diningtable": 11,"dog": 12,
+        "horse": 13,"motorbike": 14,"person": 15,"pottedplant": 16,
+        "sheep": 17,"sofa": 17,"train": 18,"tv": 20
+    },
+    "labels_short": [
+        "bg","jet","bike","bird","boat","jar","bus",
+        "car","cat","chair","cow","table","dog","horse",
+        "motor","person","plant","sheep","sofa","train","tv"
+    ],
+    "colors" :[
+        [0, 0, 0], [64, 64, 192], [192, 64, 64],
+        [255, 0, 0], [0, 255, 0], [0, 0, 255],
+        [255, 255, 0], [0, 255, 255], [255, 0, 255],
+        [128, 255, 0], [128, 0, 255], [0, 128, 255],
+        [255, 128, 0], [0, 255, 128], [255, 0, 128],
+        [0, 128, 128],  [128, 0, 128], [128, 128, 0],
+        [128, 0, 0],  [0, 128, 0], [0, 0, 128]
+    ]
+}
