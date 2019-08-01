@@ -48,7 +48,7 @@ def top_n(prediction, n=1, get_classes=False):
     return (classes if get_classes else buf)
 
 
-class Model_Warper():
+class Model_Wrapper():
     def __init__(self, sess, model_name):
         self.weights = {
             'resnet50': 'resnet/resnet50_weights_tf_dim_ordering_tf_kernels.h5',
@@ -111,7 +111,8 @@ class Model_Warper():
         self.model_label_out = tf.cast(tf.compat.v1.math.argmax(self.model_out,-1),tf.int32)
 
 
-    def get_img_resized_keeping_aspect_ratio(self, img, dsize=(224, 224), inter=cv2.INTER_AREA):
+    def resize_keeping_aspect_ratio(self, img, dsize=(224, 224), inter=cv2.INTER_AREA):
+        self.src_shape = img.shape
         rows, cols, channals = img.shape
         max_dim = max(rows, cols)
         tmp = np.zeros((max_dim, max_dim, 3), dtype=np.uint8)
@@ -120,21 +121,28 @@ class Model_Warper():
         return resized
 
 
-    def load_image(self, file_names, dsize=(224, 224)):
-        """
-            This function only accepts a list of path
-        """
-        assert isinstance(file_names, list),'This function only accepts a list of path'
+    def load_image(self, fn, dsize=(224, 224)):
+        if isinstance(fn, str):
+            fn = [fn]
+            input_type = 'single'
+        elif isinstance(fn,list):
+            input_type = 'batch'
+        else:
+            raise ValueError('Unknown input type' + fn)
+        
         buf = []
-        for path in file_names:
-            assert os.path.exists(path)
+        for path in fn:
+            assert os.path.exists(path),path
             image = cv2.imread(path)
             if self.model_name in ['mobilenet_v2', 'xception', 'inception_v3']:
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            image = self.get_img_resized_keeping_aspect_ratio(image, dsize)
+            image = self.resize_keeping_aspect_ratio(image, dsize)
             buf.append(image)
         image_batch = np.array(buf, dtype=np.uint8)
-        return image_batch
+        if input_type == 'single':
+            return image_batch[0]
+        else:
+            return image_batch
 
 
     def project(self, x):

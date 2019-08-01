@@ -75,30 +75,50 @@ class Pascal_Voc_Utill():
 
 voc = Pascal_Voc_Utill()
 
+def get_target(d_class=8):
+    img = np.zeros((512, 512), dtype=np.uint8)
+    #cv2.putText(img,'ICRA',(30,250), cv2.FONT_HERSHEY_COMPLEX, 6,(d_class*10),16,cv2.LINE_8)
+    #cv2.putText(img,'2020',(30,400), cv2.FONT_HERSHEY_COMPLEX, 6,((d_class+1)*10),16,cv2.LINE_8)
+
+    # cv2.rectangle(img,(150,150),(380,380),(d_class*10),-1)
+    # cv2.circle(img,(256,256),150,(d_class*10),-1)
+
+    # cv2.circle(img,(256,256),200,((d_class-1)*10),30)
+    # cv2.circle(img,(256,256),120,(d_class*10),30)
+    # cv2.circle(img,(256,256),50,((d_class+1)*10),-1)
+
+    cv2.putText(img, 'A', (120, 410), cv2.FONT_HERSHEY_SIMPLEX,15, (d_class*10), 45, cv2.LINE_8)
+    #_,img = cv2.threshold(img,127,d_class,cv2.THRESH_BINARY)
+    #img = np.full((512,512),d_class,dtype=np.uint8)
+    target = np.around(img/10).astype(np.uint8)
+    return target
 
 class Segmentation_Wrapper():
-    def __init__(self,sess, model_name):
-        self.weights = {
-            'xception': 'deeplabv3_xception_tf_dim_ordering_tf_kernels.h5',
-            'mobilenetv2': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5'
-        }
+    def __init__(self,sess,model_name,dataset='pascal_voc'):
         self.sess = sess
         self.weights_folder = 'tmp/weights/deeplab/'
-        assert os.path.exists(self.weights_folder),'Weights should be placed in '+self.weights_folder
-        assert model_name in self.weights.keys(),'Model [%s] is unsupported' % (model_name)
+        self.full_name = '%s:%s'%(model_name,dataset)
         self.model_name = model_name
+        self.dataset = dataset
+        self.weights = {
+            'xception:pascal_voc': 'deeplabv3_xception_tf_dim_ordering_tf_kernels.h5',
+            'mobilenetv2:pascal_voc': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5',
+            #'xception:cityscapes': 'deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5',
+            #'mobilenetv2:cityscapes': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5'
+        }
+        assert self.full_name in self.weights.keys(),'%s is unsupported' % (self.full_name)
         self.load_model()
         self.predict(np.zeros((512,512,3),dtype=np.float32))
         print('> Done')
         
     def load_model(self):
-        fn_weight = os.path.join(self.weights_folder,self.weights[self.model_name])
+        fn_weight = os.path.join(self.weights_folder,self.weights[self.full_name])
         assert os.path.exists(fn_weight), 'File not found '+ fn_weight
 
         with self.sess.as_default():
             with tf.variable_scope('model'):
-                print('> Loading Model [%s]' % (self.model_name))
-                model = Deeplabv3(weights='pascal_voc', backbone=self.model_name, weights_path = fn_weight)
+                print('> Loading Model [%s] on [%s]' % (self.model_name,self.dataset))
+                model = Deeplabv3(weights=self.dataset, backbone=self.model_name, weights_path = fn_weight)
                 self.model = model
                 
                 model_weights = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES, scope='model')
@@ -121,26 +141,37 @@ class Segmentation_Wrapper():
         resized = cv2.resize(tmp, dsize, interpolation=inter)
         return resized
 
-    def resize_back(self, img, inter=cv2.INTER_AREA):
-        rows, cols, channals = self.src_shape
+    def resize_back(self, img, dsize = None, BGR = False, inter=cv2.INTER_AREA):
+        if dsize == None:
+            rows, cols, channals = self.src_shape
         max_dim = max(rows, cols)
         resized = cv2.resize(img, (max_dim,max_dim), interpolation=inter)
-        return resized[:rows, :cols, :]
+        img = resized[:rows, :cols, :]
+        if BGR:
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        return img
 
-    def load_image(self, file_names, dsize=(512, 512)):
-        """
-            This function only accepts a list of path
-        """
-        assert isinstance(file_names, list),'This function only accepts a list of path'
+    def load_image(self, fn, dsize=(512, 512)):
+        if isinstance(fn, str):
+            fn = [fn]
+            input_type = 'single'
+        elif isinstance(fn,list):
+            input_type = 'batch'
+        else:
+            raise ValueError('Unknown input type' + fn)
+        
         buf = []
-        for path in file_names:
-            assert os.path.exists(path)
+        for path in fn:
+            assert os.path.exists(path),path
             image = cv2.imread(path)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             image = self.resize_keeping_aspect_ratio(image, dsize)
             buf.append(image)
         image_batch = np.array(buf, dtype=np.uint8)
-        return image_batch
+        if input_type == 'single':
+            return image_batch[0]
+        else:
+            return image_batch
 
     def project(self,x):
         return (x.astype(np.float32) / 127.5) - 1.0
