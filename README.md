@@ -1,4 +1,4 @@
-# Segmentation and Classification Keras model warpper 
+# Segmentation and Classification Keras model warpper
 
 ## Get Started
 

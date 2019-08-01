@@ -33,10 +33,12 @@ for fn in voc_samples:
         label = m.predict(fn)[0]
     disp = m.resize_back(voc.get_label_colormap(label))
     img = m.resize_back(m.load_image(fn))
+    overlap = cv2.addWeighted(img, 0.5, disp, 0.5, 20)
 
-    fig = plt.figure(dpi=80)
-    sub_plot(fig,1,2,1,'image',img)
-    sub_plot(fig,1,2,2,voc.semantic_report(label),disp)
+    fig = plt.figure(figsize=(12, 3), dpi=80, facecolor='w', edgecolor='k')
+    sub_plot(fig,1,3,1,'image',img)
+    sub_plot(fig,1,3,2,voc.semantic_report(label),disp)
+    sub_plot(fig,1,3,3,'overlap',overlap)
     plt.show(block = False)
 
 plt.show()

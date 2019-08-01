@@ -38,16 +38,18 @@ while(cap.isOpened()):
             
         with Tock('xception'):
             label_x = x.predict(x.project(img_reshape))
-            x_disp = m.resize_back(pascal_voc.get_label_colormap(label_x[0]))
+            x_disp = m.resize_back(voc.get_label_colormap(label_x[0]))
+            x_overlap = cv2.addWeighted(frame_bgr, 0.5, x_disp, 0.5, 20)
             
         with Tock('mobilenetv2'):
             label_m = m.predict(m.project(img_reshape))
-            m_disp = m.resize_back(pascal_voc.get_label_colormap(label_m[0]))
-            
+            m_disp = m.resize_back(voc.get_label_colormap(label_m[0]))
+            m_overlap = cv2.addWeighted(frame_bgr, 0.5, m_disp, 0.5, 20)
+
         with Tock('Post-Processing'):
             cv2.imshow('img',frame_bgr)
-            cv2.imshow('semantic_x',x_disp)
-            cv2.imshow('semantic_m',m_disp)
+            cv2.imshow('semantic_x',x_overlap)
+            cv2.imshow('semantic_m',m_overlap)
             if 27 == cv2.waitKey(1):
                 cv2.destroyAllWindows()
                 break
