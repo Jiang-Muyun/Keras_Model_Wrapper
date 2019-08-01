@@ -25,8 +25,7 @@ clear_output()
 
 x = Segmentation_Wrapper(sess,'xception')
 m = Segmentation_Wrapper(sess,'mobilenetv2')
-base = '/media/james/Ubuntu_Data/dataset/airplane/'
-cap = cv2.VideoCapture(os.path.join(base,'9_Very_Close_Takeoffs_Landings.mp4'))
+cap = cv2.VideoCapture('tmp/videos/9_Very_Close_Takeoffs_Landings.mp4')
 
 while(cap.isOpened()):
     with Tick(''):

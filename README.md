@@ -17,6 +17,11 @@ The weights are cached in server inside NTU campus, so you will not be able to a
 # init temp path
 mkdir -p tmp/weights
 
+# download airplane test videos
+wget -P tmp/videos http://ntu.h1fast.com/airplane/9_Very_Close_Takeoffs_Landings.mp4
+wget -P tmp/videos http://ntu.h1fast.com/airplane/20_Landings_in_9_Minutes.mp4
+wget -P tmp/videos http://ntu.h1fast.com/airplane/Landing_with_strong_side_wind.mp4
+
 # deeplab
 wget -P tmp/weights/deeplab http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5
 wget -P tmp/weights/deeplab http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5
