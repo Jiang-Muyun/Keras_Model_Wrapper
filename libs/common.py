@@ -91,9 +91,12 @@ class Tick():
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.delta = 1000*(time.time()-self.t_start)
+        self.t_end = = time.time()
+        self.delta = self.t_end-self.t_start
+        self.fps = 1/self.delta
+
         if not self.silent:
-            print('[%.0f ms]' % (self.delta))
+            print('[%.0f ms]' % (self.delta * 1000))
             sys.stdout.flush()
 
 
@@ -107,9 +110,11 @@ class Tock():
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        self.t_end = = time.time()
+        self.delta = self.t_end-self.t_start
+        self.fps = 1/self.delta
         if self.report_time:
-            self.delta = 1000*(time.time()-self.t_start)
-            print('(%s%.0fms) ' % (self.name, self.delta), end='')
+            print('(%s%.0fms) ' % (self.name, self.delta * 1000), end='')
         else:
             print('.', end='')
         sys.stdout.flush()

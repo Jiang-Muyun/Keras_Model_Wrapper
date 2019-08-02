@@ -23,27 +23,30 @@ tf.compat.v1.keras.backend.set_session(sess)
 from IPython.display import clear_output
 clear_output()
 
-x = Segmentation_Wrapper(sess,'xception')
-m = Segmentation_Wrapper(sess,'mobilenetv2')
+xception = Segmentation_Wrapper(sess,'xception')
+mobilenet = Segmentation_Wrapper(sess,'mobilenetv2')
 clear_output()
 
-cap = cv2.VideoCapture('tmp/videos/9_Very_Close_Takeoffs_Landings.mp4')
+cap = cv2.VideoCapture('tmp/Videos/9_Very_Close_Takeoffs_Landings.mp4')
+
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+out = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480))
 
 while(cap.isOpened()):
     with Tick(''):
         with Tock('Pre-Processing'):
             ret, frame_bgr = cap.read()
             frame_bgr = cv2.resize(frame_bgr,(0,0),fx=0.5,fy=0.5)
-            img_reshape = m.resize_keeping_aspect_ratio(cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB))
+            img_reshape = mobilenet.resize_keeping_aspect_ratio(cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB))
             
         with Tock('xception'):
-            label_x = x.predict(x.project(img_reshape))
-            x_disp = m.resize_back(voc.get_label_colormap(label_x[0]))
+            label_x = xception.predict(xception.project(img_reshape))
+            x_disp = mobilenet.resize_back(voc.get_label_colormap(label_x[0]))
             x_overlap = cv2.addWeighted(frame_bgr, 0.5, x_disp, 0.5, 20)
             
         with Tock('mobilenetv2'):
-            label_m = m.predict(m.project(img_reshape))
-            m_disp = m.resize_back(voc.get_label_colormap(label_m[0]))
+            label_m = mobilenet.predict(mobilenet.project(img_reshape))
+            m_disp = mobilenet.resize_back(voc.get_label_colormap(label_m[0]))
             m_overlap = cv2.addWeighted(frame_bgr, 0.5, m_disp, 0.5, 20)
 
         with Tock('Post-Processing'):
@@ -53,3 +56,37 @@ while(cap.isOpened()):
             if 27 == cv2.waitKey(1):
                 cv2.destroyAllWindows()
                 break
+
+
+cap = cv2.VideoCapture('tmp/Videos/9_Very_Close_Takeoffs_Landings.mp4')
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+font = cv2.FONT_HERSHEY_SIMPLEX
+out = cv2.VideoWriter('tmp/output.avi',fourcc, 30.0, (640,360))
+counter = 0
+while(cap.isOpened()):
+    with Tick(''):
+        ret, frame_bgr = cap.read()
+        frame_bgr = cv2.resize(frame_bgr,(0,0),fx=0.5,fy=0.5)
+        img_reshape = mobilenet.resize_keeping_aspect_ratio(cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB))
+            
+        with Tock('xception') as t1:
+            label_x = xception.predict(xception.project(img_reshape))
+            x_disp = mobilenet.resize_back(voc.get_label_colormap(label_x[0]))
+            x_overlap = cv2.addWeighted(frame_bgr, 0.5, x_disp, 0.5, 20)
+        
+        with Tock('mobilenetv2') as t2:
+            label_m = mobilenet.predict(mobilenet.project(img_reshape))
+            m_disp = mobilenet.resize_back(voc.get_label_colormap(label_m[0]))
+            m_overlap = cv2.addWeighted(frame_bgr, 0.5, m_disp, 0.5, 20)
+        
+        text = 'Xception:%2.0f fps, %s'%(1/t.delta*1000,voc.semantic_report(label_x[0]))
+        cv2.putText(x_overlap,text,(10,40), font, 1,(0,255,0),2,cv2.LINE_AA)
+        
+        text = 'MobileNetv2:%2.0f fps, %s'%(1/t.delta*1000,voc.semantic_report(label_x[0]))
+        cv2.putText(m_overlap,text,(10,40), font, 1,(0,255,0),2,cv2.LINE_AA)
+        
+        counter += 1
+        if counter == 10:
+            cap.release()
+            out.release()
+            break
