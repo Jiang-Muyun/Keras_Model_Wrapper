@@ -91,7 +91,7 @@ class Tick():
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.t_end = = time.time()
+        self.t_end = time.time()
         self.delta = self.t_end-self.t_start
         self.fps = 1/self.delta
 
@@ -110,7 +110,7 @@ class Tock():
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.t_end = = time.time()
+        self.t_end = time.time()
         self.delta = self.t_end-self.t_start
         self.fps = 1/self.delta
         if self.report_time:
