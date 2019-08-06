@@ -24,11 +24,13 @@ from IPython.display import clear_output
 from mask_rcnn.rcnn_warpper import *
 clear_output()
 
-frame_bgr = cv2.imread(voc_samples[0])
+for fn in voc_samples:
+    frame_bgr = cv2.imread(fn)
+    with Tock('interference'):
+        detections = mask_rcnn_predict(frame_bgr)
+        rcnn_overlap = mask_rcnn_plot(detections,frame_bgr)
 
-with Tock('interference'):
-    detections = mask_rcnn_predict(frame_bgr)
-    rcnn_overlap = mask_rcnn_plot(detections,frame_bgr)
-
-plt.imshow(cv2.cvtColor(rcnn_overlap,cv2.COLOR_BGR2RGB))
-plt.show()
+    fig = plt.figure(figsize=(12, 4), dpi=100, facecolor='w', edgecolor='k')
+    sub_plot(fig,1,2,1,'image',cv2.cvtColor(frame_bgr,cv2.COLOR_BGR2RGB))
+    sub_plot(fig,1,2,2,'overlap',cv2.cvtColor(rcnn_overlap,cv2.COLOR_BGR2RGB))
+    plt.show(block = False)

@@ -78,13 +78,11 @@ def mask_rcnn_plot(detections,frame_bgr):
     mask[:,:,2] = mask_n.astype(np.uint8)*255
 
     overlap = cv2.addWeighted(frame_bgr, 0.5, mask, 0.5, 20)
-
+    font = cv2.FONT_HERSHEY_SIMPLEX
     for i,roi in enumerate(rois):
         y1,x1,y2,x2 = roi
-        if class_ids[i] == class_names.index('airplane'):
-            cv2.rectangle(overlap,(x1,y1),(x2,y2),(255,255,0),2)
-        else:
-            cv2.rectangle(overlap,(x1,y1),(x2,y2),(255,0,255),2)
+        cv2.rectangle(overlap,(x1,y1),(x2,y2),(0,255,0),2)
+        cv2.putText(overlap,class_names[class_ids[i]],(x1,y1+25), font, 1,(255,255,255),2,cv2.LINE_AA)
     return overlap
     
 

@@ -8,7 +8,7 @@ tensorflow-gpu
 keras
 opencv-contrib-python
 h5py
+imgaug
 IPython
 jupyter
-pycocotools
-imgaug
+# pycocotools
