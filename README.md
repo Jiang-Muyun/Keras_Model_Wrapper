@@ -1,20 +1,31 @@
 # Segmentation and classification simple warpper
 
+The code is tested on python 3.6, tensorflow 1.14.0, Keras 2.2.4, Ubuntu 18.04. [Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
+
+- Segmentation models supported
+    + DeepLabv3 Xception
+    + DeepLabv3 MobileNetV2 
+    + Mask_RCNN ResNet50
+- Classification models supported
+    + Xception
+    + InceptionV3
+    + ResNet50
+    + MobileNetV2
+    + VGG16, VGG19
+- Models that keras.application supported
+    + Inception_resnet
+    + Densenet
+    + NASNet
+
 ## Get Started
 
-The code is tested on python 3.6, tensorflow 1.4, Ubuntu 18.04. The code currently support:
-
-- DeepLabv3 Xception
-- DeepLabv3 MobileNetV2 
-- Mask_RCNN ResNet50
-
-[Youtube Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
-
-The weights are cached in server inside NTU campus, so you will not be able to access these files outside NTU.
+The weights can only be accessible inside NTU campus.
 
 ```bash
-sudo pip3 install -r requirements.txt
+# install python dependences
+pip3 install -r requirements.txt
 
+# Download the files that you need
 # airplane test videos
 wget -P tmp/videos/ http://ntu.h1fast.com/airplane/9_Very_Close_Takeoffs_Landings.mp4
 wget -P tmp/videos/ http://ntu.h1fast.com/airplane/20_Landings_in_9_Minutes.mp4
