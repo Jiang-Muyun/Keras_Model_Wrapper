@@ -6,8 +6,9 @@ matplotlib
 scikit-image
 tensorflow-gpu
 keras
-opencv-python
+opencv-contrib-python
 h5py
-imgaug
-IPython[all]
+IPython
+jupyter
 pycocotools
+imgaug
