@@ -27,9 +27,9 @@ pip3 install -r requirements.txt
 
 # Download the files that you need
 # airplane test videos
-wget -P tmp/videos/ http://ntu.h1fast.com/airplane/9_Very_Close_Takeoffs_Landings.mp4
-wget -P tmp/videos/ http://ntu.h1fast.com/airplane/20_Landings_in_9_Minutes.mp4
-wget -P tmp/videos/ http://ntu.h1fast.com/airplane/Landing_with_strong_side_wind.mp4
+wget -P tmp/videos/ http://ntu.h1fast.com/videos/9_Very_Close_Takeoffs_Landings.mp4
+wget -P tmp/videos/ http://ntu.h1fast.com/videos/20_Landings_in_9_Minutes.mp4
+wget -P tmp/videos/ http://ntu.h1fast.com/videos/Landing_with_strong_side_wind.mp4
 
 # deeplab weights
 wget -P tmp/weights/deeplab/ http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5

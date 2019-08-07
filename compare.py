@@ -16,7 +16,9 @@ from tensorflow.python.keras import backend as K
 from libs.common import *
 from libs.segmentation import *
 
-sess = tf.compat.v1.Session()
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
@@ -31,7 +33,9 @@ from mask_rcnn.rcnn_warpper import *
 mask_rcnn_predict(np.zeros((360, 640, 3),dtype=np.uint8))
 clear_output()
 
-cap = cv2.VideoCapture('tmp/Videos/9_Very_Close_Takeoffs_Landings.mp4')
+fn_video = 'tmp/videos/9_Very_Close_Takeoffs_Landings.mp4'
+assert os.path.exists(fn_video)
+cap = cv2.VideoCapture(fn_video)
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 font = cv2.FONT_HERSHEY_SIMPLEX
 out = cv2.VideoWriter('tmp/deeplab_cmp.avi',fourcc, 30.0, (640*2,360*2))

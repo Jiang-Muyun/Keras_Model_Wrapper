@@ -16,7 +16,9 @@ from tensorflow.python.keras import backend as K
 from libs.common import *
 from libs.classification import *
 
-sess = tf.compat.v1.Session()
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 

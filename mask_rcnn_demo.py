@@ -16,7 +16,9 @@ from tensorflow.python.keras import backend as K
 from libs.common import *
 from libs.segmentation import *
 
-sess = tf.compat.v1.Session()
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
@@ -26,7 +28,7 @@ clear_output()
 
 for fn in voc_samples:
     frame_bgr = cv2.imread(fn)
-    with Tock('interference'):
+    with Tick('interference'):
         detections = mask_rcnn_predict(frame_bgr)
         rcnn_overlap = mask_rcnn_plot(detections,frame_bgr)
 
