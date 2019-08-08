@@ -11,6 +11,7 @@ import keras
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
+from .common import *
 from deeplab.model import Deeplabv3
 
 class Pascal_Voc_Utill():
@@ -94,31 +95,29 @@ def get_target(d_class=8):
     return target
 
 class Segmentation_Wrapper():
-    def __init__(self,sess,model_name,dataset='pascal_voc'):
+    def __init__(self,sess,model_name):
         self.sess = sess
-        self.weights_folder = 'tmp/weights/deeplab/'
-        self.full_name = '%s:%s'%(model_name,dataset)
         self.model_name = model_name
-        self.dataset = dataset
+        self.weights_folder = 'tmp/weights/deeplab/'
         self.weights = {
-            'xception:pascal_voc': 'deeplabv3_xception_tf_dim_ordering_tf_kernels.h5',
-            'mobilenetv2:pascal_voc': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5',
-            #'xception:cityscapes': 'deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5',
-            #'mobilenetv2:cityscapes': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5'
+            'xception': 'deeplabv3_xception_tf_dim_ordering_tf_kernels.h5',
+            'mobilenetv2': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5',
+            'xception_cityscapes': 'deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5',
+            'mobilenetv2_cityscapes': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5'
         }
-        assert self.full_name in self.weights.keys(),'%s is unsupported' % (self.full_name)
+        assert model_name in self.weights.keys(),'%s is unsupported' % (model_name)
         self.load_model()
         self.predict(np.zeros((512,512,3),dtype=np.float32))
         print('> Done')
         
     def load_model(self):
-        fn_weight = os.path.join(self.weights_folder,self.weights[self.full_name])
-        assert os.path.exists(fn_weight), 'File not found '+ fn_weight
+        fn_weight = os.path.join(self.weights_folder,self.weights[self.model_name])
+        download_file(self.weights_folder,domain + files['deeplab'][self.model_name])
 
         with self.sess.as_default():
             with tf.variable_scope('model'):
-                print('> Loading Model [%s] on [%s]' % (self.model_name,self.dataset))
-                model = Deeplabv3(weights=self.dataset, backbone=self.model_name, weights_path = fn_weight)
+                print('> Loading Model [%s] ' % (self.model_name))
+                model = Deeplabv3(weights='pascal_voc', backbone=self.model_name, weights_path = fn_weight)
                 self.model = model
                 
                 model_weights = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES, scope='model')

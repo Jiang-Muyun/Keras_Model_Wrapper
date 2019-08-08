@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 import keras
+from IPython.display import clear_output
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
@@ -22,7 +23,6 @@ sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
-from IPython.display import clear_output
 from mask_rcnn.rcnn_warpper import *
 clear_output()
 
@@ -36,3 +36,5 @@ for fn in voc_samples:
     sub_plot(fig,1,2,1,'image',cv2.cvtColor(frame_bgr,cv2.COLOR_BGR2RGB))
     sub_plot(fig,1,2,2,'overlap',cv2.cvtColor(rcnn_overlap,cv2.COLOR_BGR2RGB))
     plt.show(block = False)
+
+plt.show()

@@ -12,7 +12,7 @@ import tensorflow as tf
 from keras.models import Model
 from keras.applications import resnet50, mobilenet_v2, inception_v3, xception
 from tensorflow.python.keras import backend as K
-
+from IPython.display import clear_output
 from libs.common import *
 from libs.classification import *
 
@@ -22,15 +22,20 @@ sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
-from IPython.display import clear_output
-clear_output()
+"""
+Use one of the following models
+'resnet50', 
+'mobilenet_v2_0.35', 'mobilenet_v2_0.5', 'mobilenet_v2_0.75', 
+'mobilenet_v2_1.0', 'mobilenet_v2_1.3', 'mobilenet_v2_1.4', 
+'xception', 
+'inception_v3', 
+'inception_resnet_v2', 
+'vgg16', 'vgg19', 
+'densenet121', 'densenet169', 'densenet201', 
+'nasnet-mobile', 'nasnet-large'
+"""
 
-# m = Model_Warper(sess,'resnet50')
-# m = Model_Warper(sess,'mobilenet_v2')
-# m = Model_Warper(sess,'xception')
-m = Model_Warper(sess,'inception_v3')
-# m = Model_Warper(sess,'vgg16')
-# m = Model_Warper(sess,'vgg19')
+m = Model_Wrapper(sess,'mobilenet_v2_1.0')
 clear_output()
 
 for fn in imagenet_samples:

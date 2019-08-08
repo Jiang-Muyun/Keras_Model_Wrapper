@@ -8,8 +8,10 @@ import numpy as np
 import keras
 import tensorflow as tf
 from keras.models import Model
-from keras.applications import resnet50, mobilenet_v2, inception_v3, xception, vgg16, vgg19
+from keras.applications import *
 from tensorflow.python.keras import backend as K
+
+from .common import *
 
 tmp = json.load(open('data/imagenet.json'))
 imagenet_classes = [tmp[str(x)] for x in range(1000)]
@@ -49,24 +51,36 @@ def top_n(prediction, n=1, get_classes=False):
 
 
 class Model_Wrapper():
-    def __init__(self, sess, model_name):
-        self.weights = {
-            'resnet50': 'resnet/resnet50_weights_tf_dim_ordering_tf_kernels.h5',
-            'mobilenet_v2': 'mobilenet/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_224.h5',
-            'xception': 'xception/xception_weights_tf_dim_ordering_tf_kernels.h5',
-            'inception_v3': 'inception/inception_v3_weights_tf_dim_ordering_tf_kernels.h5',
-            'vgg16': 'vgg/vgg16_weights_tf_dim_ordering_tf_kernels.h5',
-            'vgg19': 'vgg/vgg19_weights_tf_dim_ordering_tf_kernels.h5'
-        }
+    def __init__(self, sess, model_name, softmax_check = False):
         self.sess = sess
-        self.weights_folder = 'tmp/weights/'
-        assert os.path.exists(self.weights_folder),'Weights should be placed in '+self.weights_folder
-        assert model_name in self.weights.keys(),'Model [%s] is unsupported' % (model_name)
         self.model_name = model_name
+        self.weights_folder = 'tmp/weights/keras_application'
+        self.weights = {
+            'resnet50': 'resnet50_weights_tf_dim_ordering_tf_kernels.h5',
+            'mobilenet_v2_0.35': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.35_224.h5',
+            'mobilenet_v2_0.5': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.5_224.h5',
+            'mobilenet_v2_0.75': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.75_224.h5',
+            'mobilenet_v2_1.0': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_224.h5',
+            'mobilenet_v2_1.3': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.3_224.h5',
+            'mobilenet_v2_1.4': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.4_224.h5',
+            'xception': 'xception_weights_tf_dim_ordering_tf_kernels.h5',
+            'inception_v3': 'inception_v3_weights_tf_dim_ordering_tf_kernels.h5',
+            'inception_resnet_v2': 'inception_resnet_v2_weights_tf_dim_ordering_tf_kernels.h5',
+            'vgg16': 'vgg16_weights_tf_dim_ordering_tf_kernels.h5',
+            'vgg19': 'vgg19_weights_tf_dim_ordering_tf_kernels.h5',
+            'densenet121': 'densenet121_weights_tf_dim_ordering_tf_kernels.h5',
+            'densenet169': 'densenet169_weights_tf_dim_ordering_tf_kernels.h5',
+            'densenet201': 'densenet201_weights_tf_dim_ordering_tf_kernels.h5',
+            'nasnet-mobile': 'NASNet-mobile.h5',
+            'nasnet-large': 'NASNet-large.h5'
+        }
+        if not model_name in self.weights.keys():
+            print('Use one of',list(self.weights.keys()))
+            raise ValueError('Unsupported Model:'+ model_name)
         self.load_model()
-        self.softmax_test()
+        if softmax_check:
+            self.softmax_test()
         print('> Done')
-
 
     def softmax_test(self):
         """ 
@@ -77,27 +91,52 @@ class Model_Wrapper():
         if y.min() >= -0.0001 and y.max() <= 1.0001 and np.allclose(np.sum(y), 1.0, atol=1e-3):
             raise Exception('The softmax layer of the network should be removed.')
 
-
     def load_model(self):
-        fn_weight = os.path.join(self.weights_folder,self.weights[self.model_name])
-        assert os.path.exists(fn_weight), 'File not found '+ fn_weight
+        fn_weight = download_file(self.weights_folder,domain+files['classification'][self.model_name])
+        print('> Loading Model [%s]' % (self.model_name))
+
         with self.sess.as_default():
             with tf.variable_scope('model'):
-                print('> Loading Model [%s]' % (self.model_name))
-
-                if self.model_name == 'mobilenet_v2':
-                    model = mobilenet_v2.MobileNetV2(input_shape=(224, 224, 3), alpha=1.0, weights=fn_weight)
                 if self.model_name == 'resnet50':
-                    model = resnet50.ResNet50(input_shape=(224, 224, 3), weights=fn_weight)
-                if self.model_name == 'xception':
-                    model = xception.Xception(input_shape=(224, 224, 3), weights=fn_weight)
-                if self.model_name == 'inception_v3':
-                    model = inception_v3.InceptionV3(input_shape=(224, 224, 3), weights=fn_weight)
-                if self.model_name == 'vgg16':
-                    model = vgg16.VGG16(input_shape=(224, 224, 3), weights=fn_weight)
-                if self.model_name == 'vgg19':
-                    model = vgg19.VGG19(input_shape=(224, 224, 3), weights=fn_weight)
+                    model = ResNet50(input_shape=(224, 224, 3), weights=fn_weight)
 
+                if self.model_name == 'mobilenet_v2_0.35':
+                    model = MobileNetV2(input_shape=(224, 224, 3), alpha=0.35, weights=fn_weight)
+                if self.model_name == 'mobilenet_v2_0.5':
+                    model = MobileNetV2(input_shape=(224, 224, 3), alpha=0.5, weights=fn_weight)
+                if self.model_name == 'mobilenet_v2_0.75':
+                    model = MobileNetV2(input_shape=(224, 224, 3), alpha=0.75, weights=fn_weight)
+                if self.model_name == 'mobilenet_v2_1.0':
+                    model = MobileNetV2(input_shape=(224, 224, 3), alpha=1.0, weights=fn_weight)
+                if self.model_name == 'mobilenet_v2_1.3':
+                    model = MobileNetV2(input_shape=(224, 224, 3), alpha=1.3, weights=fn_weight)
+                if self.model_name == 'mobilenet_v2_1.4':
+                    model = MobileNetV2(input_shape=(224, 224, 3), alpha=1.4, weights=fn_weight)
+
+                if self.model_name == 'xception':
+                    model = Xception(input_shape=(224, 224, 3), weights=fn_weight)
+                if self.model_name == 'inception_v3':
+                    model = InceptionV3(input_shape=(224, 224, 3), weights=fn_weight)
+                if self.model_name == 'inception_resnet_v2':
+                    model = InceptionResNetV2(input_shape=(224, 224, 3), weights=fn_weight)
+
+                if self.model_name == 'vgg16':
+                    model = VGG16(input_shape=(224, 224, 3), weights=fn_weight)
+                if self.model_name == 'vgg19':
+                    model = VGG19(input_shape=(224, 224, 3), weights=fn_weight)
+
+                if self.model_name == 'densenet121':
+                    model = DenseNet121(input_shape=(224, 224, 3),weights=fn_weight)
+                if self.model_name == 'densenet169':
+                    model = DenseNet169(input_shape=(224, 224, 3),weights=fn_weight)
+                if self.model_name == 'densenet201':
+                    model = DenseNet201(input_shape=(224, 224, 3),weights=fn_weight)
+                
+                if self.model_name == 'nasnet-mobile':
+                    model = NASNetMobile(input_shape=(224, 224, 3),weights=fn_weight)
+                if self.model_name == 'nasnet-large':
+                    model = NASNetLarge(input_shape=(224, 224, 3),weights=fn_weight)
+                
             self.model = model
             model_weights = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES, scope='model')
             print('> Saving Model')
@@ -151,7 +190,7 @@ class Model_Wrapper():
         """
         if self.model_name in ['resnet50', 'vgg16', 'vgg19']:
             return x.astype(np.float32) - (103.939 + 116.779 + 123.68)/3
-        if self.model_name in ['mobilenet_v2', 'xception', 'inception_v3']:
+        else:
             return (x.astype(np.float32) / 127.5) - 1.0
 
 
@@ -163,8 +202,7 @@ class Model_Wrapper():
         if self.model_name in ['resnet50', 'vgg16', 'vgg19']:
             image = (x + (103.939 + 116.779 + 123.68)/3).astype(np.uint8)
             return cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
-        if self.model_name in ['mobilenet_v2', 'xception', 'inception_v3']:
+        else:
             return ((x + 1.0) * 127.5).astype(np.uint8)
 
 
@@ -192,7 +230,7 @@ class Model_Wrapper():
             img_batch = input_var
         else:
             raise ValueError('Unknown input '+str(input_var))
-
+        
         if output == 'logits':
             return self.sess.run(self.model_out, {self.model_in: img_batch})
         elif output == 'softmax':

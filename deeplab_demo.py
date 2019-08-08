@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 import keras
+from IPython.display import clear_output
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
@@ -21,9 +22,6 @@ config.gpu_options.allow_growth = True
 sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
-
-from IPython.display import clear_output
-clear_output()
 
 # m = Segmentation_Wrapper(sess,'mobilenetv2')
 m = Segmentation_Wrapper(sess,'xception')

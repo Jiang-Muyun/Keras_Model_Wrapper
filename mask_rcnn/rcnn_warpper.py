@@ -7,21 +7,20 @@ import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 
-# Root directory of the project
-ROOT_DIR = os.path.abspath("./mask_rcnn")
-
 # Import Mask RCNN
-# sys.path.append(ROOT_DIR)  # To find local version of the library
+sys.path.append('.')
+sys.path.append('./mask_rcnn')
+from libs.common import *
 from .mrcnn import utils,visualize
 from .mrcnn import model as modellib
-#sys.path.append(os.path.join(ROOT_DIR, "samples/coco/"))  # To find local version
 from .samples.coco import coco
 
 
 MODEL_DIR = os.path.join('./tmp', "logs")
-COCO_MODEL_PATH = os.path.join('./tmp/weights/mask_rcnn', "mask_rcnn_coco.h5")
-if not os.path.exists(COCO_MODEL_PATH):
-    utils.download_trained_weights(COCO_MODEL_PATH)
+COCO_MODEL_PATH = download_file('tmp/weights/mask_rcnn',domain + files['mask_rcnn'])
+# COCO_MODEL_PATH = os.path.join('./tmp/weights/mask_rcnn', "mask_rcnn_coco.h5")
+# if not os.path.exists(COCO_MODEL_PATH):
+#     utils.download_trained_weights(COCO_MODEL_PATH)
 
 
 # COCO Class names
@@ -52,7 +51,6 @@ class InferenceConfig(coco.CocoConfig):
 config = InferenceConfig()
 config.display()
 
-IMAGE_DIR = os.path.join(ROOT_DIR, "images")
 model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
 model.load_weights(COCO_MODEL_PATH, by_name=True)
 print('> Done')

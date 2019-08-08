@@ -1,0 +1,53 @@
+{
+    "domain": "http://ntu.h1fast.com/",
+    "videos": [
+        "videos/9_Very_Close_Takeoffs_Landings.mp4",
+        "videos/20_Landings_in_9_Minutes.mp4",
+        "videos/Landing_with_strong_side_wind.mp4"
+    ],
+    "mask_rcnn": "weights/mask_rcnn/mask_rcnn_coco.h5",
+    "deeplab": {
+        "xception": "weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels.h5",
+        "mobilenetv2": "weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5",
+        "xception_cityscapes": "weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5",
+        "mobilenetv2_cityscapes": "weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5"
+    },
+    "classification": {
+        "notop":[
+            "weights/keras_application/xception_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.35_224_no_top.h5",
+            "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.5_224_no_top.h5",
+            "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.75_224_no_top.h5",
+            "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_224_no_top.h5",
+            "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.3_224_no_top.h5",
+            "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.4_224_no_top.h5",
+            "weights/keras_application/inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/densenet121_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/densenet169_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5",
+            "weights/keras_application/NASNet-large-no-top.h5",
+            "weights/keras_application/NASNet-mobile-no-top.h5"
+        ],
+        "resnet50": "weights/keras_application/resnet50_weights_tf_dim_ordering_tf_kernels.h5",
+        "mobilenet_v2_0.35": "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.35_224.h5",
+        "mobilenet_v2_0.5": "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.5_224.h5",
+        "mobilenet_v2_0.75": "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.75_224.h5",
+        "mobilenet_v2_1.0": "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_224.h5",
+        "mobilenet_v2_1.3": "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.3_224.h5",
+        "mobilenet_v2_1.4": "weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.4_224.h5",
+        "xception": "weights/keras_application/xception_weights_tf_dim_ordering_tf_kernels.h5",
+        "inception_v3": "weights/keras_application/inception_v3_weights_tf_dim_ordering_tf_kernels.h5",
+        "inception_resnet_v2": "weights/keras_application/inception_resnet_v2_weights_tf_dim_ordering_tf_kernels.h5",
+        "vgg16": "weights/keras_application/vgg16_weights_tf_dim_ordering_tf_kernels.h5",
+        "vgg19": "weights/keras_application/vgg19_weights_tf_dim_ordering_tf_kernels.h5",
+        "densenet121":"weights/keras_application/densenet121_weights_tf_dim_ordering_tf_kernels.h5",
+        "densenet169":"weights/keras_application/densenet169_weights_tf_dim_ordering_tf_kernels.h5",
+        "densenet201":"weights/keras_application/densenet201_weights_tf_dim_ordering_tf_kernels.h5",
+        "nasnet-mobile":"weights/keras_application/NASNet-mobile.h5",
+        "nasnet-large":"weights/keras_application/NASNet-large.h5"
+    }
+}

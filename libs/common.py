@@ -5,17 +5,31 @@ import cv2
 import glob
 import time
 import random
+import requests
+from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 
+os.path.exists
+def download_file(folder,url,skip_when_exists = True):
+    os.makedirs(folder,exist_ok=True)
+    fn = url.split('/')[-1]
+    local_filename = os.path.join(folder,fn)
+    if skip_when_exists and os.path.exists(local_filename):
+        print('Use cache',local_filename)
+        return local_filename
+    
+    print('Download', url)
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(local_filename, 'wb') as f:
+            for chunk in tqdm(r.iter_content(chunk_size=102400)): 
+                if chunk: # filter out keep-alive new chunks
+                    f.write(chunk)
+    return local_filename
 
-def make_sure_path_exist(path):
-    if not os.path.exists(path):
-        os.mkdir(path)
-
-
-make_sure_path_exist('tmp/')
-make_sure_path_exist('tmp/img')
+files = json.load(open('data/files.json'))
+domain = files['domain']
 
 voc_samples = glob.glob('data/segmentation/*')
 imagenet_samples = glob.glob('data/classification/*')

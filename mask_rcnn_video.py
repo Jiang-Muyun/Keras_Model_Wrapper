@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 import keras
+from IPython.display import clear_output
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
@@ -22,13 +23,11 @@ sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
-from IPython.display import clear_output
 from mask_rcnn.rcnn_warpper import *
 clear_output()
 
-fn_video = 'tmp/videos/9_Very_Close_Takeoffs_Landings.mp4'
-assert os.path.exists(fn_video)
-cap = cv2.VideoCapture(fn_video)
+cap = cv2.VideoCapture(download_file('tmp/videos',domain + files['videos'][0]))
+
 while(cap.isOpened()):
     ret, frame_bgr = cap.read()
     frame_bgr = cv2.resize(frame_bgr,(0,0),fx=0.5,fy=0.5)
