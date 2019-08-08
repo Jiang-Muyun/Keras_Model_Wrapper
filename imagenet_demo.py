@@ -23,22 +23,30 @@ sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
 """
-Use one of the following models
-'resnet50', 
-'mobilenet_v2_0.35', 'mobilenet_v2_0.5', 'mobilenet_v2_0.75', 
-'mobilenet_v2_1.0', 'mobilenet_v2_1.3', 'mobilenet_v2_1.4', 
-'xception', 
-'inception_v3', 
-'inception_resnet_v2', 
-'vgg16', 'vgg19', 
-'densenet121', 'densenet169', 'densenet201', 
-'nasnet-mobile', 'nasnet-large'
+Please select one of the following models
+    'resnet50', 
+    'mobilenet_v2_0.35', 
+    'mobilenet_v2_0.5', 
+    'mobilenet_v2_0.75', 
+    'mobilenet_v2_1.0', 
+    'mobilenet_v2_1.3', 
+    'mobilenet_v2_1.4', 
+    'xception', 
+    'inception_v3', 
+    'inception_resnet_v2', 
+    'vgg16', 
+    'vgg19', 
+    'densenet121', 
+    'densenet169', 
+    'densenet201', 
+    'nasnet-mobile', 
+    'nasnet-large'
 """
 
 m = Model_Wrapper(sess,'mobilenet_v2_1.0')
-clear_output()
 
 for fn in imagenet_samples:
     with Tick():
         prediction = m.predict(fn)
-    print(top_n(prediction,n=5),'\n')
+        print()
+        print(top_n(prediction,n=5))

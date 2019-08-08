@@ -10,7 +10,7 @@ from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.path.exists
+
 def download_file(folder,url,skip_when_exists = True):
     os.makedirs(folder,exist_ok=True)
     fn = url.split('/')[-1]
@@ -20,12 +20,17 @@ def download_file(folder,url,skip_when_exists = True):
         return local_filename
     
     print('Download', url)
+    response = requests.head(url)
+    total_bytes = int(response.headers['content-length'])
+    pbar = tqdm(total=total_bytes)
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
-            for chunk in tqdm(r.iter_content(chunk_size=102400)): 
-                if chunk: # filter out keep-alive new chunks
+            for chunk in r.iter_content(chunk_size=102400): 
+                pbar.update(len(chunk))
+                if chunk:
                     f.write(chunk)
+    pbar.close()
     return local_filename
 
 files = json.load(open('data/files.json'))
