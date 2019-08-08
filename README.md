@@ -1,24 +1,22 @@
 # Segmentation and classification simple warpper
 
-The code is tested on python 3.6, tensorflow 1.14.0, Keras 2.2.4, Ubuntu 18.04. [Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
+Model currently supported [Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
 
-- Segmentation models supported
-    + DeepLabv3 Xception
-    + DeepLabv3 MobileNetV2 
+- Segmentation models
+    + DeepLabv3 (Xception, MobileNetV2)
     + Mask_RCNN ResNet50
-- Classification models supported
-    + Xception
-    + Inception_v3
+- Classification models
     + ResNet50
     + MobileNetV2
+    + Xception
+    + InceptionV3
+    + Inception_ResnetV2
     + VGG16, VGG19
-    + Inception_Resnet
     + Densenet
     + NASNet
 
 ## Get Started
 
-Start with conda
 ```bash
 conda create --name tf python=3.6
 conda activate tf
@@ -30,13 +28,13 @@ pip install cython
 pip install keras tqdm Pillow scikit-image opencv-python h5py imgaug pycocotools requests
 ```
 
-The program will automatically download files needed. But the files can only be accessible inside NTU campus.
+The program will automatically download needed files. But the files can only be accessible inside NTU campus.
 
 ```bash
-# Run deeplab v3 demo on video
+# Run DeepLabv3 demo on video
 python deeplab_video.py
 
-# Run mask_rcnn demo on video
+# Run Mask_RCNN demo on video
 python mask_rcnn_video.py
 
 # Run classification demo on imagenet
