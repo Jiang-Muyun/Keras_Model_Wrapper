@@ -7,14 +7,14 @@ import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 
-# Import Mask RCNN
-sys.path.append('.')
-sys.path.append('./mask_rcnn')
-from libs.common import *
-from .mrcnn import utils,visualize
-from .mrcnn import model as modellib
-from .samples.coco import coco
+module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+if not module_Base in sys.path:
+    sys.path.append(module_Base)
 
+from lib.utils import *
+from mask_rcnn.mrcnn import utils,visualize
+from mask_rcnn.mrcnn import model as modellib
+from mask_rcnn.samples.coco import coco
 
 MODEL_DIR = os.path.join('./tmp', "logs")
 COCO_MODEL_PATH = download_file('tmp/weights/', domain + files['mask_rcnn'])

@@ -10,8 +10,9 @@ from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 
-script_Path = os.path.realpath(__file__)
-module_Base = os.path.abspath(os.path.join(script_Path, '../../'))
+module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+if not module_Base in sys.path:
+    sys.path.append(module_Base)
 
 files = json.load(open(os.path.join(module_Base, 'data/files.json')))
 domain = files['domain']

@@ -1,5 +1,6 @@
 # %matplotlib inline
 import os
+import sys
 import cv2
 import time
 import glob
@@ -11,9 +12,13 @@ from keras.models import Model
 from keras.applications import *
 from tensorflow.python.keras import backend as K
 
-from .common import *
+module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+if not module_Base in sys.path:
+    sys.path.append(module_Base)
 
-tmp = json.load(open('data/imagenet.json'))
+from lib.utils import *
+
+tmp = json.load(open(os.path.join(module_Base,'data/imagenet.json')))
 imagenet_classes = [tmp[str(x)] for x in range(1000)]
 
 def process_imagenet_prediction(y):
