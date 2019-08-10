@@ -14,8 +14,8 @@ from keras.applications import resnet50, mobilenet_v2, inception_v3, xception
 from tensorflow.python.keras import backend as K
 from IPython.display import clear_output
 
-from lib.utils import *
-from lib.classification import *
+from model_wrapper.utils import *
+from model_wrapper.classification import *
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True

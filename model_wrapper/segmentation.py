@@ -16,7 +16,7 @@ module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../')
 if not module_Base in sys.path:
     sys.path.append(module_Base)
 
-from lib.utils import *
+from model_wrapper.utils import *
 from deeplab.model import Deeplabv3
 
 class Pascal_Voc_Utill():

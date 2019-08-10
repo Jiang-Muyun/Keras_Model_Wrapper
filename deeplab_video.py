@@ -14,8 +14,8 @@ import tensorflow as tf
 from tensorflow.python.keras import backend as K
 from IPython.display import clear_output
 
-from lib.utils import *
-from lib.segmentation import *
+from model_wrapper.utils import *
+from model_wrapper.segmentation import *
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True

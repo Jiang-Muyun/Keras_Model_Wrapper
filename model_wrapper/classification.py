@@ -16,7 +16,7 @@ module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../')
 if not module_Base in sys.path:
     sys.path.append(module_Base)
 
-from lib.utils import *
+from model_wrapper.utils import *
 
 tmp = json.load(open(os.path.join(module_Base,'data/imagenet.json')))
 imagenet_classes = [tmp[str(x)] for x in range(1000)]
