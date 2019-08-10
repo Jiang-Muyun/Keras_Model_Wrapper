@@ -34,9 +34,14 @@ pip install cython
 pip install keras tqdm Pillow scikit-image opencv-python h5py imgaug pycocotools requests
 ```
 
-Show predictings on demo video.
+Time for some demo.
 
 ```bash
+# clone this respository
+git clone https://github.com/Jiang-Murray/Keras_Model_Wrapper.git
+cd Keras_Model_Wrapper
+conda activate tf
+
 # Run DeepLabv3 demo on video
 python deeplab_video.py
 
