@@ -12,7 +12,7 @@ import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
 from .common import *
-from deeplab.model import Deeplabv3
+from ..deeplab.model import Deeplabv3
 
 class Pascal_Voc_Utill():
     def __init__(self):

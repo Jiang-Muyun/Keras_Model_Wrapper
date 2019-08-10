@@ -10,6 +10,14 @@ from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 
+script_Path = os.path.realpath(__file__)
+module_Base = os.path.abspath(os.path.join(script_Path, '../../'))
+
+files = json.load(open(os.path.join(module_Base, 'data/files.json')))
+domain = files['domain']
+
+voc_samples = glob.glob(os.path.join(module_Base, 'data/segmentation/*'))
+imagenet_samples = glob.glob(os.path.join(module_Base, 'data/classification/*'))
 
 def download_file(folder,url,skip_when_exists = True):
     os.makedirs(folder,exist_ok=True)
@@ -32,12 +40,6 @@ def download_file(folder,url,skip_when_exists = True):
                     f.write(chunk)
     pbar.close()
     return local_filename
-
-files = json.load(open('data/files.json'))
-domain = files['domain']
-
-voc_samples = glob.glob('data/segmentation/*')
-imagenet_samples = glob.glob('data/classification/*')
 
 def sub_plot(fig, rows, cols, index, title, image):
     axis = fig.add_subplot(rows, cols, index)

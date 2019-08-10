@@ -25,6 +25,7 @@ def process_imagenet_prediction(y):
     assert y.shape == (1000,), y.shape
 
     if y.min() <= -0.0001 or y.max() >= 1.0001 and np.abs(np.sum(y) - 1.0) > 1e-3:
+        print('Doing Softmax')
         e_x = np.exp(y - np.max(y))
         y = e_x / e_x.sum()
     return y
@@ -51,7 +52,7 @@ def top_n(prediction, n=1, get_classes=False):
 
 
 class Model_Wrapper():
-    def __init__(self, sess, model_name, softmax_check = False):
+    def __init__(self, sess, model_name):
         self.sess = sess
         self.model_name = model_name
         self.weights_folder = 'tmp/weights/keras_application'
@@ -78,8 +79,7 @@ class Model_Wrapper():
             print('Use one of',list(self.weights.keys()))
             raise ValueError('Unsupported Model:'+ model_name)
         self.load_model()
-        if softmax_check:
-            self.softmax_test()
+        self.softmax_test()
         print('> Done')
 
     def softmax_test(self):
@@ -89,7 +89,8 @@ class Model_Wrapper():
         fake_image = np.zeros((224, 224,3),dtype=np.float32)
         y = self.predict(fake_image, 'logits')
         if y.min() >= -0.0001 and y.max() <= 1.0001 and np.allclose(np.sum(y), 1.0, atol=1e-3):
-            raise Exception('The softmax layer of the network should be removed.')
+            #raise Exception('The softmax layer of the network should be removed.')
+            print('Warning: The softmax layer of the network should be removed.')
 
     def load_model(self):
         fn_weight = download_file(self.weights_folder,domain+files['classification'][self.model_name])
