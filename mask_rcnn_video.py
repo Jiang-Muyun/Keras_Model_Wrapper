@@ -26,12 +26,13 @@ tf.compat.v1.keras.backend.set_session(sess)
 from mask_rcnn.rcnn_warpper import *
 clear_output()
 
-cap = cv2.VideoCapture(http_download('tmp/videos',domain + files['videos'][0]))
+cap = cv2.VideoCapture('data/demo_video.mp4')
 
 while(cap.isOpened()):
     ret, frame_bgr = cap.read()
-    frame_bgr = cv2.resize(frame_bgr,(0,0),fx=0.5,fy=0.5)
-
+    if not ret:
+        break
+    
     with Tick('interference'):
         detections = mask_rcnn_predict(frame_bgr)
         overlap = mask_rcnn_plot(detections,frame_bgr)

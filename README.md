@@ -34,7 +34,7 @@ pip install cython
 pip install keras tqdm Pillow scikit-image opencv-python h5py imgaug pycocotools requests
 ```
 
-The program will automatically download the files needed, which can only be accessible inside NTU campus.
+Show predictings on demo video.
 
 ```bash
 # Run DeepLabv3 demo on video

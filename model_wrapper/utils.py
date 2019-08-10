@@ -20,42 +20,48 @@ voc_samples = glob.glob(os.path.join(moduleBase, 'data/segmentation/*'))
 imagenet_samples = glob.glob(os.path.join(moduleBase, 'data/classification/*'))
 
 def auto_download(folder,tag):
-    print('Try cache server',urls_cache[tag])
-    fn_weight = http_download(folder,urls_cache[tag],timeout=0.2)
-    if fn_weight == None:
-        print('Download from Github ==>',urls[tag])
-        fn_weight = http_download(folder,urls[tag],timeout=10)
-    if fn_weight == None:
-        raise ValueError('Unable to download pretrained weights from',urls[tag])
-    return fn_weight
-
-def http_download(folder,url,timeout=1,skip_when_exists = True):
-    os.makedirs(folder,exist_ok=True)
-    fn = url.split('/')[-1]
+    os.makedirs(folder,exist_ok = True)
+    fn = urls[tag].split('/')[-1]
     local_filename = os.path.join(folder,fn)
-    if skip_when_exists and os.path.exists(local_filename):
+    if os.path.exists(local_filename):
         print('> Use cache',local_filename)
         return local_filename
     
-    result = None
-    pbar = tqdm()
+    try:
+        r = requests.get('https://ntu.h1fast.com/index.html', timeout=0.5)
+        r.raise_for_status()
+        url = urls_cache[tag]
+        print('==> Downloading weights from cache server')
+    except:
+        url = urls[tag]
+        print('==> Downloading weights from Github')
+
+    if not http_download(local_filename,url):
+        if os.path.exists(local_filename):
+            os.remove(local_filename)
+        raise Exception('Unable to download pretrained weights from ' + urls[tag])
+    return local_filename
+
+def http_download(local_filename,url):
     size_downloaded = 0
     try:
-        r = requests.get(url, stream=True, timeout=timeout)
+        r = requests.get(url, stream=True, timeout=5)
         r.raise_for_status()
-        with open(local_filename, 'wb') as fp:
-            for chunk in r.iter_content(chunk_size=102400): 
-                size_downloaded += len(chunk)
-                pbar.update(len(chunk))
-                pbar.set_description("%.2f MB" % (size_downloaded/1024/1024))
-                if chunk:
-                    fp.write(chunk)
-        result = local_filename
+        with tqdm(total = int(r.headers['Content-Length'])) as pbar:
+            with open(local_filename, 'wb') as fp:
+                for chunk in r.iter_content(chunk_size=102400): 
+                    pbar.update(len(chunk))
+                    size_downloaded += len(chunk)
+                    pbar.set_description("> %.2f MB" % (size_downloaded/1024/1024))
+                    if chunk:
+                        fp.write(chunk)
+        return True
     except Exception as err:
-        result = None
-        if timeout > 1:print(err)
-    pbar.close()
-    return result
+        print(err)
+        return True
+    except KeyboardInterrupt:
+        return False
+
 
 def sub_plot(fig, rows, cols, index, title, image):
     axis = fig.add_subplot(rows, cols, index)

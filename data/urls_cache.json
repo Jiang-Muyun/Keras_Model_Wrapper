@@ -1,5 +1,4 @@
 {
-    "demo_video": "http://ntu.h1fast.com/videos/9_Very_Close_Takeoffs_Landings.mp4",
     "maskrcnn_coco" :"http://ntu.h1fast.com/weights/mask_rcnn/mask_rcnn_coco.h5",
     "maskrcnn_balloon" :"http://ntu.h1fast.com/weights/mask_rcnn_balloon.h5",
 

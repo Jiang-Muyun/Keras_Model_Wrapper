@@ -23,19 +23,20 @@ sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
-# wrapper = Segmentation_Wrapper(sess,'mobilenetv2')
-wrapper = Segmentation_Wrapper(sess,'xception')
+wrapper = Segmentation_Wrapper(sess,'mobilenetv2')
+# wrapper = Segmentation_Wrapper(sess,'xception')
 clear_output()
 
-cap = cv2.VideoCapture(http_download('tmp/videos',domain + files['videos'][0]))
+cap = cv2.VideoCapture('data/demo_video.mp4')
 
 while(cap.isOpened()):
     ret, frame_bgr = cap.read()
-    frame_bgr = cv2.resize(frame_bgr,(0,0),fx=0.5,fy=0.5)
+    if not ret:
+        break
     frame_rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
     img_reshape = wrapper.resize_keeping_aspect_ratio(frame_rgb)
     
-    with Tick():
+    with Tick('interference'):
         label = wrapper.predict(wrapper.project(img_reshape))
         disp = wrapper.resize_back(voc.get_label_colormap(label[0]))
         overlap = cv2.addWeighted(frame_bgr, 0.5, disp, 0.5, 20)

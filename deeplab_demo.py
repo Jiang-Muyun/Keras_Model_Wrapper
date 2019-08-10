@@ -29,7 +29,7 @@ clear_output()
 
 voc.show_legend()
 for fn in voc_samples:
-    with Tick():
+    with Tick('interference'):
         label = wrapper.predict(fn)[0]
     disp = wrapper.resize_back(voc.get_label_colormap(label))
     img = wrapper.resize_back(wrapper.load_image(fn))
