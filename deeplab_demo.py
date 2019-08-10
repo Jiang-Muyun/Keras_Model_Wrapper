@@ -23,16 +23,16 @@ sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
-# m = Segmentation_Wrapper(sess,'mobilenetv2')
-m = Segmentation_Wrapper(sess,'xception')
+# wrapper = Segmentation_Wrapper(sess,'mobilenetv2')
+wrapper = Segmentation_Wrapper(sess,'xception')
 clear_output()
 
 voc.show_legend()
 for fn in voc_samples:
     with Tick():
-        label = m.predict(fn)[0]
-    disp = m.resize_back(voc.get_label_colormap(label))
-    img = m.resize_back(m.load_image(fn))
+        label = wrapper.predict(fn)[0]
+    disp = wrapper.resize_back(voc.get_label_colormap(label))
+    img = wrapper.resize_back(wrapper.load_image(fn))
     overlap = cv2.addWeighted(img, 0.5, disp, 0.5, 20)
 
     fig = plt.figure(figsize=(12, 3), dpi=80, facecolor='w', edgecolor='k')

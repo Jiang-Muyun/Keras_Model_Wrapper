@@ -44,10 +44,10 @@ Please select one of the following models
     'nasnet-large'
 """
 
-m = Model_Wrapper(sess,'mobilenet_v2_1.0')
+wrapper = Model_Wrapper(sess,'mobilenet_v2_1.0')
 
 for fn in imagenet_samples:
     with Tick():
-        prediction = m.predict(fn)
+        prediction = wrapper.predict(fn)
         print()
         print(top_n(prediction,n=5))
