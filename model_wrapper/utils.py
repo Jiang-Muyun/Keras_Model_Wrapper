@@ -14,33 +14,48 @@ moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
 if not moduleBase in sys.path:
     sys.path.append(moduleBase)
 
-files = json.load(open(os.path.join(moduleBase, 'data/files.json')))
-domain = files['domain']
-
+urls = json.load(open(os.path.join(moduleBase, 'data/urls.json')))
+urls_cache = json.load(open(os.path.join(moduleBase, 'data/urls_cache.json')))
 voc_samples = glob.glob(os.path.join(moduleBase, 'data/segmentation/*'))
 imagenet_samples = glob.glob(os.path.join(moduleBase, 'data/classification/*'))
 
-def download_file(folder,url,skip_when_exists = True):
+def auto_download(folder,tag):
+    print('Try cache server',urls_cache[tag])
+    fn_weight = http_download(folder,urls_cache[tag],timeout=0.2)
+    if fn_weight == None:
+        print('Download from Github ==>',urls[tag])
+        fn_weight = http_download(folder,urls[tag],timeout=10)
+    if fn_weight == None:
+        raise ValueError('Unable to download pretrained weights from',urls[tag])
+    return fn_weight
+
+def http_download(folder,url,timeout=1,skip_when_exists = True):
     os.makedirs(folder,exist_ok=True)
     fn = url.split('/')[-1]
     local_filename = os.path.join(folder,fn)
     if skip_when_exists and os.path.exists(local_filename):
-        print('Use cache',local_filename)
+        print('> Use cache',local_filename)
         return local_filename
     
-    print('Download', url)
-    response = requests.head(url)
-    total_bytes = int(response.headers['content-length'])
-    pbar = tqdm(total=total_bytes)
-    with requests.get(url, stream=True) as r:
+    result = None
+    pbar = tqdm()
+    size_downloaded = 0
+    try:
+        r = requests.get(url, stream=True, timeout=timeout)
         r.raise_for_status()
-        with open(local_filename, 'wb') as f:
+        with open(local_filename, 'wb') as fp:
             for chunk in r.iter_content(chunk_size=102400): 
+                size_downloaded += len(chunk)
                 pbar.update(len(chunk))
+                pbar.set_description("%.2f MB" % (size_downloaded/1024/1024))
                 if chunk:
-                    f.write(chunk)
+                    fp.write(chunk)
+        result = local_filename
+    except Exception as err:
+        result = None
+        if timeout > 1:print(err)
     pbar.close()
-    return local_filename
+    return result
 
 def sub_plot(fig, rows, cols, index, title, image):
     axis = fig.add_subplot(rows, cols, index)

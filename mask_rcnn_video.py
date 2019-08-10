@@ -17,7 +17,7 @@ from tensorflow.python.keras import backend as K
 from model_wrapper.utils import *
 from model_wrapper.segmentation import *
 
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 sess = tf.compat.v1.Session(config=config)
 sess.as_default()
@@ -26,7 +26,7 @@ tf.compat.v1.keras.backend.set_session(sess)
 from mask_rcnn.rcnn_warpper import *
 clear_output()
 
-cap = cv2.VideoCapture(download_file('tmp/videos',domain + files['videos'][0]))
+cap = cv2.VideoCapture(http_download('tmp/videos',domain + files['videos'][0]))
 
 while(cap.isOpened()):
     ret, frame_bgr = cap.read()

@@ -1,0 +1,28 @@
+{
+    "demo_video": "http://ntu.h1fast.com/videos/9_Very_Close_Takeoffs_Landings.mp4",
+    "maskrcnn_coco" :"http://ntu.h1fast.com/weights/mask_rcnn/mask_rcnn_coco.h5",
+    "maskrcnn_balloon" :"http://ntu.h1fast.com/weights/mask_rcnn_balloon.h5",
+
+    "deeplab_xception": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels.h5",
+    "deeplab_mobilenetv2": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5",
+    "deeplab_xception_cityscapes": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5",
+    "deeplab_mobilenetv2_cityscapes": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5",
+
+    "resnet50": "http://ntu.h1fast.com/weights/keras_application/resnet50_weights_tf_dim_ordering_tf_kernels.h5",
+    "mobilenet_v2_0.35": "http://ntu.h1fast.com/weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.35_224.h5",
+    "mobilenet_v2_0.5": "http://ntu.h1fast.com/weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.5_224.h5",
+    "mobilenet_v2_0.75": "http://ntu.h1fast.com/weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.75_224.h5",
+    "mobilenet_v2_1.0": "http://ntu.h1fast.com/weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_224.h5",
+    "mobilenet_v2_1.3": "http://ntu.h1fast.com/weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.3_224.h5",
+    "mobilenet_v2_1.4": "http://ntu.h1fast.com/weights/keras_application/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.4_224.h5",
+    "xception": "http://ntu.h1fast.com/weights/keras_application/xception_weights_tf_dim_ordering_tf_kernels.h5",
+    "inception_v3": "http://ntu.h1fast.com/weights/keras_application/inception_v3_weights_tf_dim_ordering_tf_kernels.h5",
+    "inception_resnet_v2": "http://ntu.h1fast.com/weights/keras_application/inception_resnet_v2_weights_tf_dim_ordering_tf_kernels.h5",
+    "vgg16": "http://ntu.h1fast.com/weights/keras_application/vgg16_weights_tf_dim_ordering_tf_kernels.h5",
+    "vgg19": "http://ntu.h1fast.com/weights/keras_application/vgg19_weights_tf_dim_ordering_tf_kernels.h5",
+    "densenet121":"http://ntu.h1fast.com/weights/keras_application/densenet121_weights_tf_dim_ordering_tf_kernels.h5",
+    "densenet169":"http://ntu.h1fast.com/weights/keras_application/densenet169_weights_tf_dim_ordering_tf_kernels.h5",
+    "densenet201":"http://ntu.h1fast.com/weights/keras_application/densenet201_weights_tf_dim_ordering_tf_kernels.h5",
+    "nasnet-mobile":"http://ntu.h1fast.com/weights/keras_application/NASNet-mobile.h5",
+    "nasnet-large":"http://ntu.h1fast.com/weights/keras_application/NASNet-large.h5"
+}

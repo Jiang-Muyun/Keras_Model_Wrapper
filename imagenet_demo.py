@@ -17,7 +17,7 @@ from IPython.display import clear_output
 from model_wrapper.utils import *
 from model_wrapper.classification import *
 
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 sess = tf.compat.v1.Session(config=config)
 sess.as_default()

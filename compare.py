@@ -16,7 +16,7 @@ from tensorflow.python.keras import backend as K
 from libs.common import *
 from libs.segmentation import *
 
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 sess = tf.compat.v1.Session(config=config)
 sess.as_default()

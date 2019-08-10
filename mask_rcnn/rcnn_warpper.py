@@ -17,11 +17,7 @@ from mask_rcnn.mrcnn import model as modellib
 from mask_rcnn.samples.coco import coco
 
 MODEL_DIR = os.path.join('./tmp', "logs")
-COCO_MODEL_PATH = download_file('tmp/weights/', domain + files['mask_rcnn'])
-# COCO_MODEL_PATH = os.path.join('./tmp/weights/mask_rcnn', "mask_rcnn_coco.h5")
-# if not os.path.exists(COCO_MODEL_PATH):
-#     utils.download_trained_weights(COCO_MODEL_PATH)
-
+COCO_MODEL_PATH = auto_download('tmp/weights/','mask_rcnn_coco')
 
 # COCO Class names
 # Index of the class in the list is its ID. For example, to get ID of

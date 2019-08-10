@@ -57,28 +57,10 @@ class Model_Wrapper():
     def __init__(self, sess, model_name):
         self.sess = sess
         self.model_name = model_name
-        self.weights_folder = 'tmp/weights/keras_application'
-        self.weights = {
-            'resnet50': 'resnet50_weights_tf_dim_ordering_tf_kernels.h5',
-            'mobilenet_v2_0.35': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.35_224.h5',
-            'mobilenet_v2_0.5': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.5_224.h5',
-            'mobilenet_v2_0.75': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_0.75_224.h5',
-            'mobilenet_v2_1.0': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_224.h5',
-            'mobilenet_v2_1.3': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.3_224.h5',
-            'mobilenet_v2_1.4': 'mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.4_224.h5',
-            'xception': 'xception_weights_tf_dim_ordering_tf_kernels.h5',
-            'inception_v3': 'inception_v3_weights_tf_dim_ordering_tf_kernels.h5',
-            'inception_resnet_v2': 'inception_resnet_v2_weights_tf_dim_ordering_tf_kernels.h5',
-            'vgg16': 'vgg16_weights_tf_dim_ordering_tf_kernels.h5',
-            'vgg19': 'vgg19_weights_tf_dim_ordering_tf_kernels.h5',
-            'densenet121': 'densenet121_weights_tf_dim_ordering_tf_kernels.h5',
-            'densenet169': 'densenet169_weights_tf_dim_ordering_tf_kernels.h5',
-            'densenet201': 'densenet201_weights_tf_dim_ordering_tf_kernels.h5',
-            'nasnet-mobile': 'NASNet-mobile.h5',
-            'nasnet-large': 'NASNet-large.h5'
-        }
-        if not model_name in self.weights.keys():
-            print('Use one of',list(self.weights.keys()))
+        self.folder = 'tmp/weights/keras_application'
+        self.supported = ['resnet50','mobilenet_v2_0.35','mobilenet_v2_0.5','mobilenet_v2_0.75','mobilenet_v2_1.0','mobilenet_v2_1.3','mobilenet_v2_1.4','xception','inception_v3','inception_resnet_v2','vgg16','vgg19','densenet121','densenet169','densenet201','nasnet-mobile','nasnet-large']
+        if not model_name in self.supported:
+            print('Supported Models:',list(self.supported))
             raise ValueError('Unsupported Model:'+ model_name)
         self.load_model()
         self.softmax_test()
@@ -95,9 +77,10 @@ class Model_Wrapper():
             print('Warning: The softmax layer of the network should be removed.')
 
     def load_model(self):
-        fn_weight = download_file(self.weights_folder,domain+files['classification'][self.model_name])
+        tag = self.model_name
+        fn_weight = auto_download(self.folder,tag)
+        
         print('> Loading Model [%s]' % (self.model_name))
-
         with self.sess.as_default():
             with tf.variable_scope('model'):
                 if self.model_name == 'resnet50':

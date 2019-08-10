@@ -100,25 +100,22 @@ class Segmentation_Wrapper():
     def __init__(self,sess,model_name):
         self.sess = sess
         self.model_name = model_name
-        self.weights_folder = 'tmp/weights/deeplab/'
-        self.weights = {
-            'xception': 'deeplabv3_xception_tf_dim_ordering_tf_kernels.h5',
-            'mobilenetv2': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5',
-            'xception_cityscapes': 'deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5',
-            'mobilenetv2_cityscapes': 'deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5'
-        }
-        assert model_name in self.weights.keys(),'%s is unsupported' % (model_name)
+        self.folder = 'tmp/weights/deeplab/'
+        self.supported = ['xception','mobilenetv2','xception_cityscapes','mobilenetv2_cityscapes']
+        if not model_name in self.supported:
+            print('Supported Models:',list(self.supported))
+            raise ValueError('Unsupported Model:'+ model_name)
         self.load_model()
         self.predict(np.zeros((512,512,3),dtype=np.float32))
         print('> Done')
         
     def load_model(self):
-        fn_weight = os.path.join(self.weights_folder,self.weights[self.model_name])
-        download_file(self.weights_folder,domain + files['deeplab'][self.model_name])
-
+        tag = 'deeplab_' + self.model_name
+        fn_weight = auto_download(self.folder,tag)
+    
+        print('> Loading Model [%s] ' % (self.model_name))
         with self.sess.as_default():
             with tf.variable_scope('model'):
-                print('> Loading Model [%s] ' % (self.model_name))
                 model = Deeplabv3(weights='pascal_voc', backbone=self.model_name, weights_path = fn_weight)
                 self.model = model
                 
