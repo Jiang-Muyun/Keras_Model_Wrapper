@@ -12,16 +12,13 @@ import keras
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
-module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
-if not module_Base in sys.path:
-    sys.path.append(module_Base)
-
 from model_wrapper.utils import *
 from deeplab.model import Deeplabv3
 
 class Pascal_Voc_Utill():
     def __init__(self):
-        tmp = json.load(open(os.path.join(module_Base,'data/pascal_voc.json'), 'r'))
+        moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+        tmp = json.load(open(os.path.join(moduleBase,'data/pascal_voc.json'), 'r'))
         self.num_classes = tmp['num_classes']
         self.labels = tmp['labels_short']
         self.labels_index = tmp['labels_index']

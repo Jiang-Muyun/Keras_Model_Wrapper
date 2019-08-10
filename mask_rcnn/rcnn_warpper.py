@@ -7,9 +7,9 @@ import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 
-module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
-if not module_Base in sys.path:
-    sys.path.append(module_Base)
+moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+if not moduleBase in sys.path:
+    sys.path.append(moduleBase)
 
 from lib.utils import *
 from mask_rcnn.mrcnn import utils,visualize

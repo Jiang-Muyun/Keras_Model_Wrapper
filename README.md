@@ -1,34 +1,40 @@
-# Segmentation and classification simple warpper
+# Segmentation and classification  warpper
 
-Model currently supported [Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
+This is a simple warpper for using and evaluating deep learning models easily. [Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
 
+Models currently supported 
 - Segmentation models
     + DeepLabv3 (Xception, MobileNetV2)
     + Mask_RCNN ResNet50
 - Classification models
+    + VGG (VGG16 and VGG19)
     + ResNet50
-    + MobileNetV2
+    + Inception_V3
     + Xception
-    + InceptionV3
-    + Inception_ResnetV2
-    + VGG16, VGG19
-    + Densenet
-    + NASNet
+    + MobileNet_V2
+    + Inception_ResNet_V2
+    + Densenet (121, 169, 201)
+    + NASNet (mobile and large)
 
 ## Get Started
 
 ```bash
+# create conda environment with python 3.6
 conda create --name tf python=3.6
 conda activate tf
 
-conda install ipython
+# Install conda Jupyter notebooks supports
+conda install ipython nb_conda_kernels
+
+# Install Tensorflow and cudnn toolkit
 conda install -c anaconda tensorflow-gpu cudatoolkit=10.0
 
+# Install dependences
 pip install cython
 pip install keras tqdm Pillow scikit-image opencv-python h5py imgaug pycocotools requests
 ```
 
-The program will automatically download needed files. But the files can only be accessible inside NTU campus.
+The program will automatically download the files needed, which can only be accessible inside NTU campus.
 
 ```bash
 # Run DeepLabv3 demo on video

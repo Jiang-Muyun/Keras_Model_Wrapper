@@ -12,13 +12,10 @@ from keras.models import Model
 from keras.applications import *
 from tensorflow.python.keras import backend as K
 
-module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
-if not module_Base in sys.path:
-    sys.path.append(module_Base)
-
 from model_wrapper.utils import *
 
-tmp = json.load(open(os.path.join(module_Base,'data/imagenet.json')))
+moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+tmp = json.load(open(os.path.join(moduleBase,'data/imagenet.json')))
 imagenet_classes = [tmp[str(x)] for x in range(1000)]
 
 def process_imagenet_prediction(y):

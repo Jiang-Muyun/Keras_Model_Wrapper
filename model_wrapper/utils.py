@@ -10,15 +10,15 @@ from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 
-module_Base = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
-if not module_Base in sys.path:
-    sys.path.append(module_Base)
+moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+if not moduleBase in sys.path:
+    sys.path.append(moduleBase)
 
-files = json.load(open(os.path.join(module_Base, 'data/files.json')))
+files = json.load(open(os.path.join(moduleBase, 'data/files.json')))
 domain = files['domain']
 
-voc_samples = glob.glob(os.path.join(module_Base, 'data/segmentation/*'))
-imagenet_samples = glob.glob(os.path.join(module_Base, 'data/classification/*'))
+voc_samples = glob.glob(os.path.join(moduleBase, 'data/segmentation/*'))
+imagenet_samples = glob.glob(os.path.join(moduleBase, 'data/classification/*'))
 
 def download_file(folder,url,skip_when_exists = True):
     os.makedirs(folder,exist_ok=True)
