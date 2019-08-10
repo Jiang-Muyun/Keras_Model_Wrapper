@@ -2,7 +2,7 @@
 
 This is a simple warpper for using and evaluating deep learning models easily. [Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
 
-Models currently supported 
+Models currently supported:
 - Segmentation models
     + DeepLabv3 (Xception, MobileNetV2)
     + Mask_RCNN ResNet50
@@ -23,10 +23,10 @@ Models currently supported
 conda create --name tf python=3.6
 conda activate tf
 
-# Install conda Jupyter notebooks supports
+# Install conda Jupyter notebooks supports.
 conda install ipython nb_conda_kernels
 
-# Install Tensorflow and cudnn toolkit
+# Install tensorflow, cuda and cudnn toolkit. We use cuda10 as example.
 conda install -c anaconda tensorflow-gpu cudatoolkit=10.0
 
 # Install dependences
@@ -37,7 +37,6 @@ pip install keras tqdm Pillow scikit-image opencv-python h5py imgaug pycocotools
 Time for some demo.
 
 ```bash
-# clone this respository
 git clone https://github.com/Jiang-Murray/Keras_Model_Wrapper.git
 cd Keras_Model_Wrapper
 conda activate tf
