@@ -16,9 +16,15 @@ if not moduleBase in sys.path:
 
 urls = json.load(open(os.path.join(moduleBase, 'data/urls.json')))
 urls_cache = json.load(open(os.path.join(moduleBase, 'data/urls_cache.json')))
-voc_samples = glob.glob(os.path.join(moduleBase, 'data/segmentation/*'))
-imagenet_samples = glob.glob(os.path.join(moduleBase, 'data/classification/*'))
 
+def sizeof_fmt(num, suffix='B'):
+    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
+        if abs(num) < 1024.0:
+            return '{:.1f} {}{}'.format(num, unit, suffix)
+        num /= 1024.0
+    return '{:.1f} {}{}'.format(num, 'Yi', suffix)
+
+    
 def auto_download(folder,tag):
     os.makedirs(folder,exist_ok = True)
     fn = urls[tag].split('/')[-1]
@@ -39,26 +45,31 @@ def auto_download(folder,tag):
     if not http_download(local_filename,url):
         if os.path.exists(local_filename):
             os.remove(local_filename)
-        raise Exception('Unable to download pretrained weights from ' + urls[tag])
+        print('Unable to download pretrained weights from ' + urls[tag])
+        exit()
     return local_filename
 
+
 def http_download(local_filename,url):
-    size_downloaded = 0
+    bytes_downloaded = 0
     try:
         r = requests.get(url, stream=True, timeout=5)
         r.raise_for_status()
+        t_start = time.time()
         with tqdm(total = int(r.headers['Content-Length'])) as pbar:
             with open(local_filename, 'wb') as fp:
                 for chunk in r.iter_content(chunk_size=102400): 
                     pbar.update(len(chunk))
-                    size_downloaded += len(chunk)
-                    pbar.set_description("> %.2f MB" % (size_downloaded/1024/1024))
+                    bytes_downloaded += len(chunk)
+                    speed = int(bytes_downloaded /(time.time() - t_start))
+                    status = '  %s (%s/s)'%(sizeof_fmt(bytes_downloaded), sizeof_fmt(speed))
+                    pbar.set_description(status)
                     if chunk:
                         fp.write(chunk)
         return True
     except Exception as err:
         print(err)
-        return True
+        return False
     except KeyboardInterrupt:
         return False
 

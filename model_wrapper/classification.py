@@ -5,8 +5,9 @@ import cv2
 import time
 import glob
 import json
-import numpy as np
 import keras
+import numpy as np
+import warnings
 import tensorflow as tf
 from keras.models import Model
 from keras.applications import *
@@ -68,13 +69,15 @@ class Model_Wrapper():
 
     def softmax_test(self):
         """ 
-            Show error message when the softmax layer of the keras model is not removed
+            Show warnings when the softmax layer of the keras model is not removed
         """
         fake_image = np.zeros((224, 224,3),dtype=np.float32)
         y = self.predict(fake_image, 'logits')
         if y.min() >= -0.0001 and y.max() <= 1.0001 and np.allclose(np.sum(y), 1.0, atol=1e-3):
-            #raise Exception('The softmax layer of the network should be removed.')
-            print('Warning: The softmax layer of the network should be removed.')
+            #warnings.warn('The softmax layer of the network should be removed.')
+            self.softmax_removed = False
+        else:
+            self.softmax_removed = True
 
     def load_model(self):
         tag = self.model_name
@@ -220,7 +223,10 @@ class Model_Wrapper():
         if output == 'logits':
             return self.sess.run(self.model_out, {self.model_in: img_batch})
         elif output == 'softmax':
-            return self.sess.run(self.model_softmax, {self.model_in: img_batch})
+            if self.softmax_removed:
+                return self.sess.run(self.model_softmax, {self.model_in: img_batch})
+            else:
+                return self.sess.run(self.model_out, {self.model_in: img_batch})
         elif output == 'label':
             return self.sess.run(self.model_label_out, {self.model_in: img_batch})
         else:

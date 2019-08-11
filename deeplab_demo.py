@@ -28,14 +28,14 @@ wrapper = Segmentation_Wrapper(sess,'xception')
 clear_output()
 
 voc.show_legend()
-for fn in voc_samples:
+for fn in glob.glob('data/Pascal_Voc/*'):
     with Tick('interference'):
         label = wrapper.predict(fn)[0]
     disp = wrapper.resize_back(voc.get_label_colormap(label))
     img = wrapper.resize_back(wrapper.load_image(fn))
     overlap = cv2.addWeighted(img, 0.5, disp, 0.5, 20)
 
-    fig = plt.figure(figsize=(12, 3), dpi=80, facecolor='w', edgecolor='k')
+    fig = plt.figure(figsize=(12, 4), dpi=100, facecolor='w', edgecolor='k')
     sub_plot(fig,1,3,1,'image',img)
     sub_plot(fig,1,3,2,voc.semantic_report(label),disp)
     sub_plot(fig,1,3,3,'overlap',overlap)

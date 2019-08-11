@@ -46,8 +46,7 @@ Please select one of the following models
 
 wrapper = Model_Wrapper(sess,'mobilenet_v2_1.0')
 
-for fn in imagenet_samples:
+for fn in glob.glob('data/ImageNet/*'):
     with Tick('interference'):
         prediction = wrapper.predict(fn)
-        print()
-        print(top_n(prediction,n=5))
+        print('\n'+top_n(prediction,n=5))

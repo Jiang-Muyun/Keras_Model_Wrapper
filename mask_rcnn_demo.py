@@ -26,7 +26,7 @@ tf.compat.v1.keras.backend.set_session(sess)
 from mask_rcnn.rcnn_warpper import *
 clear_output()
 
-for fn in voc_samples:
+for fn in glob.glob('data/COCO/*'):
     frame_bgr = cv2.imread(fn)
     with Tick('interference'):
         detections = mask_rcnn_predict(frame_bgr)

@@ -183,8 +183,8 @@ class Segmentation_Wrapper():
             This function can accept 4 kinds of input
             1. a string representing the path of the image
             2. a list of strings representing a batch of images
-            3. a (224, 224, 3) numpy.ndarray object
-            4. a (batch_size, 224, 224, 3) numpy.ndarray object
+            3. a (512, 512, 3) numpy.ndarray object
+            4. a (batch_size, 512, 512, 3) numpy.ndarray object
 
             This function can output 3 kinds of classification results
             1. label: top probability prediction class id
