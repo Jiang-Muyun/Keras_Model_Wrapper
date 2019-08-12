@@ -13,29 +13,15 @@ import keras
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
-from libs.common import *
-from libs.segmentation import *
+from model_wrapper.utils import voc,sub_plot,Tick,new_session
+from deeplab.warpper import Deeplab_Wrapper
 
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True
-sess = tf.compat.v1.Session(config=config)
-sess.as_default()
-tf.compat.v1.keras.backend.set_session(sess)
+sess = new_session()
+xception = Deeplab_Wrapper(sess,'xception')
+mobilenet = Deeplab_Wrapper(sess,'mobilenetv2')
+from mask_rcnn.warpper import predict,plot
 
-from IPython.display import clear_output
-clear_output()
-
-xception = Segmentation_Wrapper(sess,'xception')
-mobilenet = Segmentation_Wrapper(sess,'mobilenetv2')
-clear_output()
-
-from mask_rcnn.rcnn_warpper import *
-mask_rcnn_predict(np.zeros((360, 640, 3),dtype=np.uint8))
-clear_output()
-
-fn_video = 'tmp/videos/9_Very_Close_Takeoffs_Landings.mp4'
-assert os.path.exists(fn_video)
-cap = cv2.VideoCapture(fn_video)
+cap = cv2.VideoCapture('tmp/videos/9_Very_Close_Takeoffs_Landings.mp4')
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 font = cv2.FONT_HERSHEY_SIMPLEX
 out = cv2.VideoWriter('tmp/deeplab_cmp.avi',fourcc, 30.0, (640*2,360*2))
@@ -59,8 +45,8 @@ while(cap.isOpened()):
             m_overlap = cv2.addWeighted(frame_bgr, 0.5, m_disp, 0.5, 20)
         
         with Tock('mask_rcnn') as t3:
-            detections = mask_rcnn_predict(frame_bgr)
-            rcnn_overlap = mask_rcnn_plot(detections,frame_bgr)
+            detections = predict(frame_bgr)
+            rcnn_overlap = plot(detections,frame_bgr)
 
 
         filter1 = filter1 * 0.8 + t1.fps * 0.2
