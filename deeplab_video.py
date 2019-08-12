@@ -13,21 +13,12 @@ import random
 import keras
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
-from IPython.display import clear_output
 
-from model_wrapper.utils import *
-from model_wrapper.segmentation import *
+from model_wrapper.utils import voc,sub_plot,Tick,new_session
+from deeplab.warpper import Deeplab_Wrapper
 
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True
-sess = tf.compat.v1.Session(config=config)
-sess.as_default()
-tf.compat.v1.keras.backend.set_session(sess)
-
-assert sys.argv[1] in ['mobilenetv2','xception']
-model_name = sys.argv[1]
-wrapper = Segmentation_Wrapper(sess,model_name)
-clear_output()
+assert sys.argv[1] in ['mobilenetv2','xception'], sys.argv[1]
+wrapper = Deeplab_Wrapper(new_session(),sys.argv[1])
 
 cap = cv2.VideoCapture('data/demo_video.mp4')
 

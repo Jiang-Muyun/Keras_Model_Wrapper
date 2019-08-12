@@ -10,27 +10,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 import keras
-from IPython.display import clear_output
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
-from model_wrapper.utils import *
-from model_wrapper.segmentation import *
-
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True
-sess = tf.compat.v1.Session(config=config)
-sess.as_default()
-tf.compat.v1.keras.backend.set_session(sess)
-
-from mask_rcnn.rcnn_warpper import *
-clear_output()
+from model_wrapper.utils import sub_plot,Tick,voc
+from mask_rcnn.warpper import predict,plot
 
 for fn in glob.glob('data/COCO/*'):
     frame_bgr = cv2.imread(fn)
     with Tick('interference'):
-        detections = mask_rcnn_predict(frame_bgr)
-        rcnn_overlap = mask_rcnn_plot(detections,frame_bgr)
+        detections = predict(frame_bgr)
+        rcnn_overlap = plot(detections,frame_bgr)
 
     fig = plt.figure(figsize=(12, 4), dpi=100, facecolor='w', edgecolor='k')
     sub_plot(fig,1,2,1,'image',cv2.cvtColor(frame_bgr,cv2.COLOR_BGR2RGB))

@@ -138,6 +138,26 @@ class Model_Wrapper():
         self.model_softmax = tf.compat.v1.nn.softmax(self.model_out,-1)
         self.model_label_out = tf.cast(tf.compat.v1.math.argmax(self.model_out,-1),tf.int32)
 
+    def print_support_models(self):
+        print("""Supported models
+        'resnet50', 
+        'mobilenet_v2_0.35', 
+        'mobilenet_v2_0.5', 
+        'mobilenet_v2_0.75', 
+        'mobilenet_v2_1.0', 
+        'mobilenet_v2_1.3', 
+        'mobilenet_v2_1.4', 
+        'xception', 
+        'inception_v3', 
+        'inception_resnet_v2', 
+        'vgg16', 
+        'vgg19', 
+        'densenet121', 
+        'densenet169', 
+        'densenet201', 
+        'nasnet-mobile', 
+        'nasnet-large'
+        """)
 
     def resize_keeping_aspect_ratio(self, img, dsize=(224, 224), inter=cv2.INTER_AREA):
         self.src_shape = img.shape

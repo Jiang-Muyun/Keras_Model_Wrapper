@@ -47,10 +47,10 @@ class InferenceConfig(coco.CocoConfig):
 config = InferenceConfig()
 config.display()
 
-def mask_rcnn_predict(frame_bgr):
+def predict(frame_bgr):
     return model.detect([frame_bgr], verbose=0)[0]
 
-def mask_rcnn_plot(detections,frame_bgr):
+def plot(detections,frame_bgr):
     rois = detections['rois']
     masks = detections['masks']
     class_ids = detections['class_ids']
@@ -78,5 +78,5 @@ def mask_rcnn_plot(detections,frame_bgr):
 model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
 model.load_weights(COCO_MODEL_PATH, by_name=True)
 model.keras_model._make_predict_function()
-mask_rcnn_predict(np.zeros((512,512,3),dtype=np.uint8))
+predict(np.zeros((512,512,3),dtype=np.uint8))
 print('> Done')
