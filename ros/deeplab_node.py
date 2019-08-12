@@ -14,8 +14,8 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
 sys.path.append('.')
-from model_wrapper.utils import *
-from model_wrapper.segmentation import *
+from model_wrapper.utils import voc,Tick,new_session
+from deeplab.warpper import Deeplab_Wrapper
 
 class Deeplab_Node():
     def __init__(self,warpper,input_topic,output_topic):
@@ -74,15 +74,8 @@ signal.signal(signal.SIGINT, shutdownFunction)
 signal.signal(signal.SIGTERM, shutdownFunction)
 
 if __name__ == '__main__':
-    config = tf.compat.v1.ConfigProto()
-    config.gpu_options.allow_growth = True
-    sess = tf.compat.v1.Session(config=config)
-    sess.as_default()
-    tf.compat.v1.keras.backend.set_session(sess)
-
-    assert sys.argv[1] in ['mobilenetv2','xception']
-    model_name = sys.argv[1]
-    wrapper = Segmentation_Wrapper(sess,model_name)
+    assert sys.argv[1] in ['mobilenetv2','xception'], sys.argv[1]
+    wrapper = Segmentation_Wrapper(new_session(),sys.argv[1])
 
     input_topic = sys.argv[2]
     output_topic = sys.argv[3]

@@ -14,8 +14,8 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
 sys.path.append('.')
-from model_wrapper.utils import *
-from mask_rcnn.rcnn_warpper import *
+from model_wrapper.utils import Tick
+from mask_rcnn.warpper import predict,plot
 
 class Mask_RCNN_Node():
     def __init__(self,input_topic):
@@ -37,8 +37,8 @@ class Mask_RCNN_Node():
             img_input = bridge.imgmsg_to_cv2(ros_data)
         
         with Tick('interference'):
-            detections = mask_rcnn_predict(img_input)
-            overlap = mask_rcnn_plot(detections,img_input)
+            detections = predict(img_input)
+            overlap = plot(detections,img_input)
             detections = overlap
 
         cv2.imshow('overlap',overlap)
