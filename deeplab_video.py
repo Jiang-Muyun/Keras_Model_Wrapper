@@ -2,6 +2,7 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+import sys
 import time
 import cv2
 import json
@@ -23,8 +24,9 @@ sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
-# wrapper = Segmentation_Wrapper(sess,'mobilenetv2')
-wrapper = Segmentation_Wrapper(sess,'xception')
+assert sys.argv[1] in ['mobilenetv2','xception']
+model_name = sys.argv[1]
+wrapper = Segmentation_Wrapper(sess,model_name)
 clear_output()
 
 cap = cv2.VideoCapture('data/demo_video.mp4')

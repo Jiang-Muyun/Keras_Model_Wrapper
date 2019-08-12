@@ -79,10 +79,11 @@ if __name__ == '__main__':
     sess.as_default()
     tf.compat.v1.keras.backend.set_session(sess)
 
-    wrapper = Segmentation_Wrapper(sess,'mobilenetv2')
-    # wrapper = Segmentation_Wrapper(sess,'xception')
+    assert sys.argv[1] in ['mobilenetv2','xception']
+    model_name = sys.argv[1]
+    wrapper = Segmentation_Wrapper(sess,model_name)
 
-    input_topic = '/camera/left/image_raw/compressed'
-    output_topic = '/deepab/semantic/compressed'
+    input_topic = sys.argv[2]
+    output_topic = sys.argv[3]
     node = Deeplab_Node(wrapper,input_topic,output_topic)
     rospy.spin()

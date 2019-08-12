@@ -17,22 +17,15 @@ from model_wrapper.utils import *
 from mask_rcnn.rcnn_warpper import *
 
 class Mask_RCNN_Node():
-    def __init__(self,input_topic,output_topic):
+    def __init__(self,input_topic):
         self.input_topic = input_topic
-        self.output_topic = output_topic
         self.input_compressed = True if self.input_topic.endswith('/compressed') else False
-        self.output_compressed = True if self.output_topic.endswith('/compressed') else False
 
-        rospy.init_node('deeplab')
+        rospy.init_node('mask_rcnn')
         if self.input_compressed:
             self.sub = rospy.Subscriber(self.input_topic, CompressedImage, self.image_callback, queue_size=1)
         else:
             self.sub = rospy.Subscriber(self.input_topic, Image, self.image_callback, queue_size=1)
-        
-        if self.output_compressed:
-            self.pub = rospy.Publisher(self.output_topic,CompressedImage,queue_size=1)
-        else:
-            self.pub = rospy.Publisher(self.output_topic,Image,queue_size=1)
         print('> Waiting for topic')
 
     def image_callback(self,ros_data):
@@ -43,25 +36,12 @@ class Mask_RCNN_Node():
             img_input = bridge.imgmsg_to_cv2(ros_data)
         
         with Tick('interference'):
-            print(img_input.shape)
             detections = mask_rcnn_predict(img_input)
             overlap = mask_rcnn_plot(detections,img_input)
+            detections = overlap
 
         cv2.imshow('overlap',overlap)
         cv2.waitKey(1)
-
-        if self.output_compressed:
-            msg = CompressedImage()
-            msg.header = ros_data.header
-            msg.format = "jpeg"
-            msg.data = np.array(cv2.imencode('.jpg', detections)[1]).tostring()
-            self.pub.publish(msg)
-        else:
-            msg = Image()
-            msg.header = ros_data.header
-            msg.data = detections.tostring()
-            self.pub.publish(msg)
-
 
 def shutdownFunction(signalnum, frame):
     print('Exit')
@@ -70,7 +50,6 @@ signal.signal(signal.SIGINT, shutdownFunction)
 signal.signal(signal.SIGTERM, shutdownFunction)
 
 if __name__ == '__main__':
-    input_topic = '/camera/left/image_raw/compressed'
-    output_topic = '/deepab/semantic/compressed'
-    node = Mask_RCNN_Node(input_topic,output_topic)
+    input_topic = sys.argv[1]
+    node = Mask_RCNN_Node(input_topic)
     rospy.spin()

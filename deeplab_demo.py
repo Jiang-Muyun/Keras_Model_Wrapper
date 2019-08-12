@@ -23,8 +23,9 @@ sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
-# wrapper = Segmentation_Wrapper(sess,'mobilenetv2')
-wrapper = Segmentation_Wrapper(sess,'xception')
+assert sys.argv[1] in ['mobilenetv2','xception']
+model_name = sys.argv[1]
+wrapper = Segmentation_Wrapper(sess,model_name)
 clear_output()
 
 voc.show_legend()

@@ -16,7 +16,7 @@ Models currently supported:
     + Densenet (121, 169, 201)
     + NASNet (mobile and large)
 
-## Get Started
+## Installation
 
 ```bash
 # create conda environment with python 3.6
@@ -34,19 +34,39 @@ pip install cython
 pip install keras tqdm Pillow scikit-image opencv-python h5py imgaug pycocotools requests
 ```
 
-Time for some demo.
+## Inference out of the box
 
 ```bash
+# Clone this repo
 git clone https://github.com/Jiang-Murray/Keras_Model_Wrapper.git
 cd Keras_Model_Wrapper
+
+# Activate environment for tensorflow applications
 conda activate tf
 
-# Run DeepLabv3 demo on video
-python deeplab_video.py
+# Run Pascal_Voc trained DeepLabv3 Xception backbone on demo video
+python deeplab_video.py xception
 
-# Run Mask_RCNN demo on video
+# Run Pascal_Voc trained DeepLabv3 Mobilenetv2 backbone on demo video
+python deeplab_video.py mobilenetv2
+
+# Run COCO trained Mask_RCNN demo on video
 python mask_rcnn_video.py
 
 # Run classification demo on imagenet
 python imagenet_demo.py
+```
+
+## Inference with ROS
+The program can automatically identify compressed and uncompressed image topics for inputs and outputs.
+
+```bash
+# Run Pascal_Voc trained DeepLabv3 Xception backbone on ROS topic /camera/left/image_raw/compressed and publish a compressed color map image to /deeplab/semantic/compressed
+python ros/deeplab_node.py xception /camera/left/image_raw/compressed /deeplab/semantic/compressed
+
+# Run Pascal_Voc trained DeepLabv3 Mobilenetv2 backbone on ROS topic /camera/left/image_raw/compressed and publish a uncompressed color map image to /deeplab/semantic/
+python ros/deeplab_node.py mobilenetv2 /camera/left/image_raw/compressed /deeplab/semantic/
+
+# Run COCO trained Mask_RCNN on ROS topic /camera/left/image_raw/compressed
+python ros/maskrcnn_node.py /camera/left/image_raw/compressed
 ```
