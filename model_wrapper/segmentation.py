@@ -52,11 +52,11 @@ class Pascal_Voc_Utill():
         for index in sort_index:
             class_id = unique[index]
             count = counts[index]
-            percent = count / (512*512) * 100
+            percent = count / (512.0*512.0) * 100.0
             if class_id == 0:
                 continue
-            if percent > 0.5:
-                report += '%s:%.0f%% ' % (self.labels[class_id], percent)
+            if percent > 0.1:
+                report += '%s:%.1f%% ' % (self.labels[class_id], percent)
                 report_count += 1
                 if report_count == limit:
                     break

@@ -34,7 +34,7 @@ def auto_download(folder,tag):
         return local_filename
     
     try:
-        r = requests.get('https://ntu.h1fast.com/index.html', timeout=0.5)
+        r = requests.get('http://ntu.h1fast.com/', timeout=0.5)
         r.raise_for_status()
         url = urls_cache[tag]
         print('==> Downloading weights from cache server')

@@ -23,8 +23,8 @@ sess = tf.compat.v1.Session(config=config)
 sess.as_default()
 tf.compat.v1.keras.backend.set_session(sess)
 
-wrapper = Segmentation_Wrapper(sess,'mobilenetv2')
-# wrapper = Segmentation_Wrapper(sess,'xception')
+# wrapper = Segmentation_Wrapper(sess,'mobilenetv2')
+wrapper = Segmentation_Wrapper(sess,'xception')
 clear_output()
 
 cap = cv2.VideoCapture('data/demo_video.mp4')

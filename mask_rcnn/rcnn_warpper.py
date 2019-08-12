@@ -49,6 +49,8 @@ config.display()
 
 model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
 model.load_weights(COCO_MODEL_PATH, by_name=True)
+model.keras_model._make_predict_function()
+mask_rcnn_predict(np.zeros(512,512,3),dtype=np.uint8)
 print('> Done')
 
 def mask_rcnn_predict(frame_bgr):
@@ -79,11 +81,3 @@ def mask_rcnn_plot(detections,frame_bgr):
         cv2.putText(overlap,class_names[class_ids[i]],(x1,y1+25), font, 1,(255,255,255),2,cv2.LINE_AA)
     return overlap
     
-
-# cap = cv2.VideoCapture('tmp/Videos/9_Very_Close_Takeoffs_Landings.mp4')
-# ret, frame_bgr = cap.read()
-# frame_bgr = cv2.resize(frame_bgr,(0,0),fx=0.5,fy=0.5)
-# with Tick(''):
-#     detections = model.detect([frame_bgr], verbose=0)
-#     overlap = mask_rcnn_plot(detections,frame_bgr)
-#     plt.imshow(cv2.cvtColor(overlap,cv2.COLOR_BGR2RGB));plt.show()
