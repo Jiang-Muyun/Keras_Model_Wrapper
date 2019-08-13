@@ -9,8 +9,6 @@ import requests
 from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
-import tensorflow as tf
-import keras
 
 moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
 if not moduleBase in sys.path:
@@ -76,6 +74,8 @@ def http_download(local_filename,url):
         return False
 
 def new_session():
+    import tensorflow as tf
+    import keras
     config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.compat.v1.Session(config=config)
