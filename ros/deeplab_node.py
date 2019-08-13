@@ -75,7 +75,7 @@ signal.signal(signal.SIGTERM, shutdownFunction)
 
 if __name__ == '__main__':
     assert sys.argv[1] in ['mobilenetv2','xception'], sys.argv[1]
-    wrapper = Segmentation_Wrapper(new_session(),sys.argv[1])
+    wrapper = Deeplab_Wrapper(new_session(),sys.argv[1])
 
     input_topic = sys.argv[2]
     output_topic = sys.argv[3]
