@@ -31,7 +31,7 @@ conda install -c anaconda tensorflow-gpu cudatoolkit=10.0
 
 # Install dependences
 pip install cython
-pip install keras tqdm Pillow scikit-image opencv-python h5py imgaug pycocotools requests
+pip install Keras==2.2.4 tqdm Pillow scikit-image opencv-python h5py imgaug pycocotools requests
 ```
 
 ## Inference out of the box
