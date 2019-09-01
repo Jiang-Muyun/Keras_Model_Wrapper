@@ -16,36 +16,42 @@ from deeplab.model import Deeplabv3
 from model_wrapper.utils import auto_download
 
 class Deeplab_Wrapper():
-    def __init__(self,sess,model_name):
+    def __init__(self, sess, model_name, dataset = 'pascal_voc', save_and_reload = False):
         self.sess = sess
         self.model_name = model_name
+        self.dataset = dataset
+        self.save_and_reload = save_and_reload
         self.folder = 'tmp/weights/deeplab/'
-        self.supported = ['xception','mobilenetv2','xception_cityscapes','mobilenetv2_cityscapes']
-        if not model_name in self.supported:
-            print('Supported Models:',list(self.supported))
-            raise ValueError('Unsupported Model:'+ model_name)
+
+        assert model_name in ['xception','mobilenetv2'],'Unsupported name:'+ model_name
+        assert dataset in ['pascal_voc','cityscapes'],'Unsupported dataset:'+ dataset
+        
         self.load_model()
         self.predict(np.zeros((512,512,3),dtype=np.float32))
         print('> Done')
         
     def load_model(self):
-        tag = 'deeplab_' + self.model_name
-        fn_weight = auto_download(self.folder,tag)
+        tag = 'deeplab_' + self.model_name + '_' + self.dataset
     
         print('> Loading Model [%s] ' % (self.model_name))
         with self.sess.as_default():
             with tf.variable_scope('model'):
-                model = Deeplabv3(weights='pascal_voc', backbone=self.model_name, weights_path = fn_weight)
-                self.model = model
+                self.model = Deeplabv3(
+                    weights = self.dataset, 
+                    backbone = self.model_name, 
+                    weights_path = auto_download(self.folder,tag)
+                )
                 
-                model_weights = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES, scope='model')
-                print('> Saving Model')
-                tf.compat.v1.train.Saver(model_weights).save(self.sess, 'tmp/')
-                print('> Reload Model')
-                tf.compat.v1.train.Saver(model_weights).restore(self.sess, 'tmp/')
+                if self.save_and_reload:
+                    # Save and reload the model to avoid batch normalization issues
+                    model_weights = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES, scope='model')
+                    print('> Saving Model')
+                    tf.compat.v1.train.Saver(model_weights).save(self.sess, 'tmp/')
+                    print('> Reload Model')
+                    tf.compat.v1.train.Saver(model_weights).restore(self.sess, 'tmp/')
         
-        self.model_in = model.layers[0].input
-        self.model_out = model.layers[-1].output
+        self.model_in = self.model.layers[0].input
+        self.model_out = self.model.layers[-1].output
         self.model_softmax = tf.compat.v1.nn.softmax(self.model_out,-1)
         self.model_label_out = tf.cast(tf.compat.v1.math.argmax(self.model_out,-1),tf.uint8)
         
@@ -58,14 +64,22 @@ class Deeplab_Wrapper():
         resized = cv2.resize(tmp, dsize, interpolation=inter)
         return resized
 
-    def resize_back(self, img, dsize = None, BGR = False, inter=cv2.INTER_AREA):
+    # def resize_back(self, img, dsize = None, BGR = False, inter=cv2.INTER_AREA):
+    #     if dsize == None:
+    #         rows, cols, channals = self.src_shape
+    #     max_dim = max(rows, cols)
+    #     resized = cv2.resize(img, (max_dim,max_dim), interpolation=inter)
+    #     img = resized[:rows, :cols, :]
+    #     if BGR:
+    #         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    #     return img
+
+    def resize_back(self, img, dsize = None, inter=cv2.INTER_AREA):
         if dsize == None:
             rows, cols, channals = self.src_shape
         max_dim = max(rows, cols)
         resized = cv2.resize(img, (max_dim,max_dim), interpolation=inter)
         img = resized[:rows, :cols, :]
-        if BGR:
-            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         return img
 
     def load_image(self, fn, dsize=(512, 512)):
@@ -97,7 +111,7 @@ class Deeplab_Wrapper():
         assert x.dtype == np.float32 or x.dtype == np.float64
         return ((x + 1.0) * 127.5).astype(np.uint8)
     
-    def predict(self, input_var):
+    def predict(self, input_var, output_mode = 'label'):
         if isinstance(input_var, str):
             img_batch = self.project(self.load_image([input_var]))
         elif isinstance(input_var, list):
@@ -109,4 +123,7 @@ class Deeplab_Wrapper():
         else:
             raise ValueError('Unknown input '+str(input_var))
 
-        return self.sess.run(self.model_label_out, {self.model_in: img_batch})
+        if output_mode == 'label':
+            return self.sess.run(self.model_label_out, {self.model_in: img_batch})
+        if output_mode == 'softmax':
+            return self.sess.run(self.model_softmax, {self.model_in: img_batch})

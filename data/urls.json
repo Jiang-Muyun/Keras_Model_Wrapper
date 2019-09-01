@@ -2,8 +2,8 @@
     "maskrcnn_coco": "https://github.com/matterport/Mask_RCNN/releases/download/v2.0/mask_rcnn_coco.h5",
     "maskrcnn_balloon": "https://github.com/matterport/Mask_RCNN/releases/download/v2.1/mask_rcnn_balloon.h5",
 
-    "deeplab_xception": "https://github.com/bonlime/keras-deeplab-v3-plus/releases/download/1.1/deeplabv3_xception_tf_dim_ordering_tf_kernels.h5",
-    "deeplab_mobilenetv2": "https://github.com/bonlime/keras-deeplab-v3-plus/releases/download/1.1/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5",
+    "deeplab_xception_pascal_voc": "https://github.com/bonlime/keras-deeplab-v3-plus/releases/download/1.1/deeplabv3_xception_tf_dim_ordering_tf_kernels.h5",
+    "deeplab_mobilenetv2_pascal_voc": "https://github.com/bonlime/keras-deeplab-v3-plus/releases/download/1.1/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5",
     "deeplab_xception_cityscapes": "https://github.com/bonlime/keras-deeplab-v3-plus/releases/download/1.2/deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5",
     "deeplab_mobilenetv2_cityscapes": "https://github.com/bonlime/keras-deeplab-v3-plus/releases/download/1.2/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5",
     

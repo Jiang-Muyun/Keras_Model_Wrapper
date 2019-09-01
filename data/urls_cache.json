@@ -2,8 +2,8 @@
     "maskrcnn_coco" :"http://ntu.h1fast.com/weights/mask_rcnn/mask_rcnn_coco.h5",
     "maskrcnn_balloon" :"http://ntu.h1fast.com/weights/mask_rcnn_balloon.h5",
 
-    "deeplab_xception": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels.h5",
-    "deeplab_mobilenetv2": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5",
+    "deeplab_xception_pascal_voc": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels.h5",
+    "deeplab_mobilenetv2_pascal_voc": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels.h5",
     "deeplab_xception_cityscapes": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_xception_tf_dim_ordering_tf_kernels_cityscapes.h5",
     "deeplab_mobilenetv2_cityscapes": "http://ntu.h1fast.com/weights/deeplab/deeplabv3_mobilenetv2_tf_dim_ordering_tf_kernels_cityscapes.h5",
 

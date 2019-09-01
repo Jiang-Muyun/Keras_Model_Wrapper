@@ -27,7 +27,7 @@ conda activate tf
 conda install ipython nb_conda_kernels
 
 # Install tensorflow, cuda and cudnn toolkit. We use cuda10 as example.
-conda install -c anaconda tensorflow-gpu cudatoolkit=10.0
+conda install -c anaconda tensorflow-gpu=1.14 cudatoolkit=10.0
 
 # Install dependences
 pip install cython
@@ -44,14 +44,13 @@ cd Keras_Model_Wrapper
 # Activate environment for tensorflow applications
 conda activate tf
 
-# Run Pascal_Voc trained DeepLabv3 Xception backbone on demo video
-python deeplab_video.py xception
+# Run DeepLabv3 demo 
+python deeplab_demo.py --mode images --model_name xception
+python deeplab_demo.py --mode video --model_name mobilenetv2
 
-# Run Pascal_Voc trained DeepLabv3 Mobilenetv2 backbone on demo video
-python deeplab_video.py mobilenetv2
-
-# Run COCO trained Mask_RCNN demo on video
-python mask_rcnn_video.py
+# Run Mask_RCNN demo
+python maskrcnn_demo.py --mode images
+python maskrcnn_demo.py --mode video
 
 # Run classification demo on imagenet
 python imagenet_demo.py
