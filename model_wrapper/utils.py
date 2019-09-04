@@ -139,7 +139,7 @@ def vstack_images(fn_list,out_fn):
     out = np.vstack(buf)
     cv2.imwrite(out_fn, out)
 
-class Pascal_Voc_Utill():
+class VOC_Utill():
     def __init__(self):
         moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
         tmp = json.load(open(os.path.join(moduleBase,'data/pascal_voc.json'), 'r'))
@@ -200,7 +200,7 @@ class Pascal_Voc_Utill():
             buf.append(distribution)
         return np.array(buf, dtype=np.uint8)
     
-voc = Pascal_Voc_Utill()
+voc = VOC_Utill()
     
 def get_target(d_class=8):
     img = np.zeros((512, 512), dtype=np.uint8)

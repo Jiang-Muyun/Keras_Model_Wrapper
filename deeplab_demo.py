@@ -27,7 +27,7 @@ def parse_args():
 def images_demo(args):
     wrapper = Deeplab_Wrapper(new_session(),args.model_name,args.dataset)
     voc.show_legend()
-    for fn in glob.glob('data/Pascal_Voc/*'):
+    for fn in glob.glob('data/voc/*'):
         img = wrapper.resize_back(wrapper.load_image(fn))
         with Tick('interference'):
             label = wrapper.predict(fn)[0]
