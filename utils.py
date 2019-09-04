@@ -139,7 +139,7 @@ class VOC_Utill():
         self.colormap = np.array(self.colors, dtype=np.uint8)
 
     def get_label_colormap(self,label):
-        assert label.dtype in [np.uint8, np.uint16, np.uint32], label.dtype
+        assert label.dtype in [np.uint8, np.uint16, np.uint32, np.int16, np.int32, np.int64], label.dtype
         assert label.max() <= 20 and label.min() >= 0, 'invalid range'
         return self.colormap[label]
 
@@ -154,8 +154,6 @@ class VOC_Utill():
         plt.show(block=False)
 
     def semantic_report(self,semantic, limit=3):
-        assert semantic.dtype == np.uint8, semantic.dtype
-        assert semantic.shape == (512, 512), semantic.shape 
         assert semantic.min() >= 0 and semantic.max() <= 20 , 'invalid range'
         report = ''
         unique, counts = np.unique(semantic, return_counts=True)
