@@ -11,10 +11,10 @@ moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
 if not moduleBase in sys.path:
     sys.path.append(moduleBase)
 
-from model_wrapper.utils import *
+from utils import *
 from mask_rcnn.mrcnn import utils,visualize
 from mask_rcnn.mrcnn import model as modellib
-from mask_rcnn.samples.coco import coco
+from mask_rcnn import coco
 
 MODEL_DIR = os.path.join('./tmp', "logs")
 COCO_MODEL_PATH = auto_download('tmp/weights/','maskrcnn_coco')

@@ -14,7 +14,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
 sys.path.append('.')
-from model_wrapper.utils import voc,Tick,new_session
+from utils import voc,Tick,new_session
 from deeplab.warpper import Deeplab_Wrapper
 
 class Deeplab_Node():

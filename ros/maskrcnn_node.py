@@ -14,7 +14,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
 sys.path.append('.')
-from model_wrapper.utils import Tick
+from utils import Tick
 from mask_rcnn.warpper import predict,plot
 
 class Mask_RCNN_Node():

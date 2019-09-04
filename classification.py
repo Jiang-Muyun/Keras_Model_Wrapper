@@ -13,9 +13,9 @@ from keras.models import Model
 from keras.applications import *
 from tensorflow.python.keras import backend as K
 
-from model_wrapper.utils import *
+from utils import *
 
-moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../'))
 tmp = json.load(open(os.path.join(moduleBase,'data/imagenet.json')))
 imagenet_classes = [tmp[str(x)] for x in range(1000)]
 
@@ -55,9 +55,10 @@ def top_n(prediction, n=1, get_classes=False):
 
 
 class Model_Wrapper():
-    def __init__(self, sess, model_name):
+    def __init__(self, sess, model_name, save_and_reload = False):
         self.sess = sess
         self.model_name = model_name
+        self.save_and_reload = save_and_reload
         self.folder = 'tmp/weights/keras_application'
         self.supported = ['resnet50','mobilenet_v2_0.35','mobilenet_v2_0.5','mobilenet_v2_0.75','mobilenet_v2_1.0','mobilenet_v2_1.3','mobilenet_v2_1.4','xception','inception_v3','inception_resnet_v2','vgg16','vgg19','densenet121','densenet169','densenet201','nasnet-mobile','nasnet-large']
         if not model_name in self.supported:
@@ -127,11 +128,12 @@ class Model_Wrapper():
                     model = NASNetLarge(input_shape=(224, 224, 3),weights=fn_weight)
                 
             self.model = model
-            model_weights = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES, scope='model')
-            print('> Saving Model')
-            tf.compat.v1.train.Saver(model_weights).save(self.sess, 'tmp/')
-            print('> Reload Model')
-            tf.compat.v1.train.Saver(model_weights).restore(self.sess, 'tmp/')
+            if self.save_and_reload:
+                model_weights = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES, scope='model')
+                print('> Saving Model')
+                tf.compat.v1.train.Saver(model_weights).save(self.sess, 'tmp/')
+                print('> Reload Model')
+                tf.compat.v1.train.Saver(model_weights).restore(self.sess, 'tmp/')
         
         self.model_in = self.model.layers[0].input
         self.model_out = self.model.layers[-1].output
@@ -251,3 +253,12 @@ class Model_Wrapper():
             return self.sess.run(self.model_label_out, {self.model_in: img_batch})
         else:
             raise ValueError('output shoud be one of ["logits","softmax","label"]')
+
+if __name__ == "__main__":
+    wrapper = Model_Wrapper(new_session(),'mobilenet_v2_1.0')
+    wrapper.print_support_models()
+
+    for fn in glob.glob('data/ImageNet/*'):
+        with Tick('interference'):
+            prediction = wrapper.predict(fn)
+            print('\n'+top_n(prediction,n=5))

@@ -12,7 +12,7 @@ import keras
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
-from model_wrapper.utils import sub_plot,Tick,voc
+from utils import sub_plot,Tick,voc
 from mask_rcnn.warpper import predict,plot
 
 def parse_args():

@@ -1,6 +1,5 @@
 # %matplotlib inline
 import os
-import sys
 import time
 import cv2
 import json
@@ -13,7 +12,9 @@ import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
 from deeplab.model import Deeplabv3
-from model_wrapper.utils import auto_download
+import sys
+sys.path.append('.')
+from utils import auto_download
 
 class Deeplab_Wrapper():
     def __init__(self, sess, model_name, dataset = 'pascal_voc', save_and_reload = False):

@@ -13,7 +13,7 @@ import keras
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
-from model_wrapper.utils import voc,sub_plot,Tick,new_session
+from utils import voc,sub_plot,Tick,new_session
 from deeplab.warpper import Deeplab_Wrapper
 
 def parse_args():

@@ -10,12 +10,11 @@ from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 
-moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../'))
 if not moduleBase in sys.path:
     sys.path.append(moduleBase)
 
 urls = json.load(open(os.path.join(moduleBase, 'data/urls.json')))
-urls_cache = json.load(open(os.path.join(moduleBase, 'data/urls_cache.json')))
 
 def sizeof_fmt(num, suffix='B'):
     for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
@@ -30,23 +29,15 @@ def auto_download(folder,tag):
     fn = urls[tag].split('/')[-1]
     local_filename = os.path.join(folder,fn)
     if os.path.exists(local_filename):
-        print('> Use cache',local_filename)
         return local_filename
-    
-    try:
-        r = requests.get('http://ntu.h1fast.com/', timeout=0.5)
-        r.raise_for_status()
-        url = urls_cache[tag]
-        print('==> Downloading weights from cache server')
-    except:
-        url = urls[tag]
-        print('==> Downloading weights from Github')
 
+    url = urls[tag]
+
+    print('==> Downloading weights from Github')
     if not http_download(local_filename,url):
         if os.path.exists(local_filename):
             os.remove(local_filename)
-        print('Unable to download pretrained weights from ' + urls[tag])
-        exit()
+        raise IOError('Unable to download pretrained weights from ' + urls[tag])
     return local_filename
 
 
@@ -69,8 +60,6 @@ def http_download(local_filename,url):
         return True
     except Exception as err:
         print(err)
-        return False
-    except KeyboardInterrupt:
         return False
 
 def new_session():
@@ -141,7 +130,7 @@ def vstack_images(fn_list,out_fn):
 
 class VOC_Utill():
     def __init__(self):
-        moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../../'))
+        moduleBase = os.path.abspath(os.path.join(os.path.realpath(__file__), '../'))
         tmp = json.load(open(os.path.join(moduleBase,'data/pascal_voc.json'), 'r'))
         self.num_classes = tmp['num_classes']
         self.labels = tmp['labels_short']

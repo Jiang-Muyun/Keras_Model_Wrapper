@@ -53,7 +53,7 @@ python maskrcnn_demo.py --mode images
 python maskrcnn_demo.py --mode video
 
 # Run classification demo on imagenet
-python imagenet_demo.py
+python classification.py
 ```
 
 ## Inference with ROS
