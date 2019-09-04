@@ -64,23 +64,25 @@ class Deeplab_Wrapper():
         resized = cv2.resize(tmp, dsize, interpolation=inter)
         return resized
 
-    # def resize_back(self, img, dsize = None, BGR = False, inter=cv2.INTER_AREA):
-    #     if dsize == None:
-    #         rows, cols, channals = self.src_shape
-    #     max_dim = max(rows, cols)
-    #     resized = cv2.resize(img, (max_dim,max_dim), interpolation=inter)
-    #     img = resized[:rows, :cols, :]
-    #     if BGR:
-    #         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-    #     return img
-
     def resize_back(self, img, dsize = None, inter=cv2.INTER_AREA):
         if dsize == None:
             rows, cols, channals = self.src_shape
         max_dim = max(rows, cols)
         resized = cv2.resize(img, (max_dim,max_dim), interpolation=inter)
-        img = resized[:rows, :cols, :]
+        img = resized[:rows, :cols]
         return img
+
+    def resize_softmax_back(self, softmax, dsize = None, inter=cv2.INTER_AREA):
+        if dsize == None:
+            rows, cols, channals = self.src_shape
+        max_dim = max(rows, cols)
+
+        softmax_reszie = np.zeros((rows, cols, softmax.shape[-1]),dtype=np.float32)
+        for i in range(softmax.shape[-1]):
+            softmax_reszie[:,:,i] = self.resize_back(softmax[:,:,i])
+        
+        softmax_reszie = softmax_reszie / np.sum(softmax_reszie,axis=-1)
+        return softmax_reszie
 
     def load_image(self, fn, dsize=(512, 512)):
         if isinstance(fn, str):
