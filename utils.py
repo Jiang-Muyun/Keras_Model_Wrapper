@@ -88,7 +88,7 @@ def auto_scale_to_display(batch):
 
 
 def norm_01(x):
-    return (x - x.min())/(x.max() - x.min())
+    return (x - x.min())/(x.max() - x.min() + + 1e-6)
 
 
 def relu(x):
