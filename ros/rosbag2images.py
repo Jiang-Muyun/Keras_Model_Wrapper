@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-import getopt
+import argparse
 import shutil
 import cv2
 import roslib
@@ -15,7 +15,7 @@ bridge = CvBridge()
 
 class Rosbag_Handler():
 
-    def __init__(self,topic,folder,node_name='handler'):
+    def __init__(self,topic,folder,interval = 5,node_name='handler'):
         self.topic = topic
         self.folder = folder
         self.frame_index = 0
@@ -29,7 +29,9 @@ class Rosbag_Handler():
             self.sub = rospy.Subscriber(self.topic, CompressedImage, self.image_callback, queue_size=1)
         else:
             self.sub = rospy.Subscriber(self.topic, Image, self.image_callback, queue_size=1)
-    
+        
+        print('[info] Waiting for images')
+
     def image_callback(self,ros_data):
         if self.src_compressed:
             np_arr = np.fromstring(ros_data.data, np.uint8)
@@ -38,7 +40,7 @@ class Rosbag_Handler():
             cv_image = bridge.imgmsg_to_cv2(ros_data)
         
         self.frame_index += 1
-        if self.frame_index % 5 == 0:
+        if self.frame_index % interval == 0:
             self.save_index += 1
             fn = os.path.join(self.folder,'frame_%d.jpg'%(self.save_index))
             cv2.imwrite(fn,cv_image)
@@ -47,8 +49,11 @@ class Rosbag_Handler():
         cv2.waitKey(1)
 
 if __name__ == '__main__':
-    topic = sys.argv[1]
-    folder = sys.argv[2]
-    os.makedirs(folder,exist_ok = True)
-    handle = Rosbag_Handler(topic,folder)
+    parser = argparse.ArgumentParser('rosbag2images.py')
+    parser.add_argument('--topic', type=str, required=True , help='Inpout topic name')
+    parser.add_argument('--output', default='rosbag_out/', help='Output image folder')
+    parser.add_argument('--interval', type=int, default=2, help='Output image folder')
+    args = parser.parse_args()
+    os.makedirs(args.output,exist_ok = True)
+    handle = Rosbag_Handler(args.topic, args.output, args.interval)
     rospy.spin()

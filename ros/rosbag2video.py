@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-import getopt
+import argparse
 import shutil
 import cv2
 import roslib
@@ -29,7 +29,9 @@ class Rosbag_Handler():
             self.sub = rospy.Subscriber(self.topic, CompressedImage, self.image_callback, queue_size=1)
         else:
             self.sub = rospy.Subscriber(self.topic, Image, self.image_callback, queue_size=1)
-    
+
+        print('[info] Waiting for images')
+
     def image_callback(self,ros_data):
         if self.src_compressed:
             np_arr = np.fromstring(ros_data.data, np.uint8)
@@ -47,8 +49,10 @@ class Rosbag_Handler():
 
 
 if __name__ == '__main__':
-    topic = sys.argv[1]
-    fn_video = sys.argv[2]
-    handle = Rosbag_Handler(topic,fn_video)
+    parser = argparse.ArgumentParser('rosbag2video.py')
+    parser.add_argument('--topic', type=str, required=True , help='Inpout topic name')
+    parser.add_argument('--output', default='rosbag.avi', help='Output video file name')
+    args = parser.parse_args()
+    handle = Rosbag_Handler(args.topic, args.output)
     rospy.spin()
     handle.VideoWriter.release()

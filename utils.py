@@ -88,32 +88,25 @@ def auto_scale_to_display(batch):
 
 
 def norm_01(x):
-    return (x - x.min())/(x.max() - x.min() + + 1e-6)
+    return (x - x.min())/(x.max() - x.min() + 1e-6)
 
+def np_l2_sum(x):
+    return np.sqrt(np.square(x.copy()).sum())
 
-def relu(x):
-    return np.maximum(0, x)
+def np_l2_mean(x):
+    return np.sqrt(np.square(x.copy()).mean())
 
-
-def l2norm(x):
-    return np.linalg.norm(x, ord=2)
-
-
-def inf_norm(x):
+def np_inf_norm(x):
     return np.linalg.norm(x, ord=np.inf_norm)
-
 
 def np_clip_by_l2norm(x, clip_norm):
     return x * clip_norm / np.linalg.norm(x, ord=2)
 
-
 def np_clip_by_infnorm(x, clip_norm):
     return x * clip_norm / np.linalg.norm(x, ord=np.inf)
 
-
 def print_mat(x):
     print(x.shape, x.dtype, x.min(), x.max())
-
 
 def multiple_randomint(min, max, count=1):
     assert count >= 1 and max > min
@@ -121,7 +114,6 @@ def multiple_randomint(min, max, count=1):
     for i in range(0, count):
         buf.append(random.randint(min, max))
     return buf
-
 
 def vstack_images(fn_list,out_fn):
     buf = [cv2.imread(fn) for fn in fn_list]

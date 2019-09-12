@@ -1,12 +1,12 @@
 # Segmentation and classification  warpper
 
-This is a simple warpper for using and evaluating deep learning models easily. [Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
+This is a simple warpper for using deeplab and Mask-RCNN models in ROS easily. [Demo Video](https://www.youtube.com/watch?v=UnnYx1wMz68)
 
 Models currently supported:
 - Segmentation models
-    + DeepLabv3 (Xception, MobileNetV2)
-    + Mask_RCNN ResNet50
-- Classification models
+    + DeepLabv3 (Xception, MobileNetV2) [1]
+    + Mask_RCNN (ResNet50) [2]
+- Classification models [3]
     + VGG (VGG16 and VGG19)
     + ResNet50
     + Inception_V3
@@ -57,15 +57,31 @@ python classification.py
 ```
 
 ## Inference with ROS
-The program can automatically identify compressed and uncompressed image topics for inputs and outputs.
+The program can deal with both compressed and uncompressed image topics for inputs and outputs.
 
 ```bash
-# Run Pascal_Voc trained DeepLabv3 Xception backbone on ROS topic /camera/left/image_raw/compressed and publish a compressed color map image to /deeplab/semantic/compressed
-python ros/deeplab_node.py xception /camera/left/image_raw/compressed /deeplab/semantic/compressed
+# Run Pascal_Voc trained DeepLabv3 Xception backbone on ROS topic and publish result to /deeplab/semantic/compressed
+python ros/deeplab_node.py xception INPUT_TOPIC /deeplab/semantic/compressed
 
-# Run Pascal_Voc trained DeepLabv3 Mobilenetv2 backbone on ROS topic /camera/left/image_raw/compressed and publish a uncompressed color map image to /deeplab/semantic/
-python ros/deeplab_node.py mobilenetv2 /camera/left/image_raw/compressed /deeplab/semantic/
+# Run Pascal_Voc trained DeepLabv3 Mobilenetv2 backbone on ROS topic and publish result to /deeplab/semantic/
+python ros/deeplab_node.py mobilenetv2 INPUT_TOPIC /deeplab/semantic/compressed
 
-# Run COCO trained Mask_RCNN on ROS topic /camera/left/image_raw/compressed
-python ros/maskrcnn_node.py /camera/left/image_raw/compressed
+# Run COCO trained Mask_RCNN on ROS topic
+python ros/maskrcnn_node.py INPUT_TOPIC
 ```
+
+## Working with rosbag
+
+```bash
+# Convert a rosbag to video
+python ros/rosbag2video.py --topic INPUT_TOPIC
+
+# Convert a rosbag to image sequences
+python ros/rosbag2images.py --topic INPUT_TOPIC --interval 5
+```
+
+## Refenerce
+
+1. https://github.com/bonlime/keras-deeplab-v3-plus
+2. https://github.com/matterport/Mask_RCNN
+3. https://github.com/keras-team/keras-applications
