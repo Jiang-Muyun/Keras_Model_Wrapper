@@ -20,6 +20,7 @@ class Rosbag_Handler():
         self.folder = folder
         self.frame_index = 0
         self.save_index = 0
+        self.interval = interval
         self.src_compressed = True if self.topic.endswith('/compressed') else False
         if not os.path.exists(self.folder):
             os.makedirs(self.folder)
@@ -40,7 +41,7 @@ class Rosbag_Handler():
             cv_image = bridge.imgmsg_to_cv2(ros_data)
         
         self.frame_index += 1
-        if self.frame_index % interval == 0:
+        if self.frame_index % self.interval == 0:
             self.save_index += 1
             fn = os.path.join(self.folder,'frame_%d.jpg'%(self.save_index))
             cv2.imwrite(fn,cv_image)
