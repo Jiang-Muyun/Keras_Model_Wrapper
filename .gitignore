@@ -2,7 +2,8 @@ weights/
 tmp/
 .vscode/
 *.ipynb
-
+torch/maskrcnn/*.mp4
+torch/maskrcnn/*.avi
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
